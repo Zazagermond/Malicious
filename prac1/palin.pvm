@@ -1,0 +1,6 @@
+
+	DSP 6	;n is variable 0, low is variable 1;high is 2; item is 3; isPalindrome is 4; list is 5
+	LDA 0 
+	LDC 0
+	STO	;n:=0
+	INPI	;READ(item)
