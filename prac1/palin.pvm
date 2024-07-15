@@ -1,6 +1,69 @@
-
-	DSP 6	;n is variable 0, low is variable 1;high is 2; item is 3; isPalindrome is 4; list is 5
+0	DSP 6	;n is variable 0, low is variable 1;high is 2; item is 3; isPalindrome is 4; list is 5
+	LDA 5
+	LDC 10
+	ANEW
+	STO	;int [] list = new int [10]
 	LDA 0 
 	LDC 0
 	STO	;n:=0
+	LDA 3
 	INPI	;READ(item)
+X1	LDA 3	
+	LDV
+	LDC 0
+	CNE	;(item!=0)
+	BZE N1	;		;USES INDEX OF END OF LOOP
+	LDA 5
+	LDV
+	LDA 0
+	LDV
+	LDXA
+	LDA 3
+	LDV
+	STO	;list[n]=item
+	LDA 0
+	LDA	0
+	LDV
+	LDC	1
+	ADD
+	STO		;n=n+1
+	LDA	3
+	INPI		;Read(item)
+	BRN	X1	;LOOP
+N1	LDA	4
+	LDC	1
+	STO		;isPalindrome=true
+	LDA	1
+	LDC	0
+	STO		;Low:=0
+	LDA	2
+	LDA	0
+	LDV
+	LDC	1
+	SUB
+	STO		;High:=n-1
+	LDA	1
+	LDV
+	LDA	2
+	LDV
+	LDC	1
+	SUB
+	CLT		;(Low < n-1)
+	BZE	N2	;END OF LOOP INDEX
+	LDA	5
+	LDV
+	LDA	1
+	LDV
+	LDXA
+	LDA	5
+	LDV
+	LDA	2
+	LDV
+	LDXA
+	CNE		;(low<n-1)
+	BZE	Y1	;IF
+	LDA	4
+	LDC	0
+	STO
+Y1	
+	
