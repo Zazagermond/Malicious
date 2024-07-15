@@ -1,0 +1,90 @@
+			  			;Alisha, Dean, Zaza -- The malicious Hadedas
+0	DSP	6	 			;list address= var 0, n= var 1, low = var 2, high = var 3, item = var 4, isPalindrome= var 5
+2	LDA	0	  			;Push address of variable 0 on TOS
+4	LDC	10	  			;Push constant 10 on Stack==TOS
+6	ANEW		  			;int [] list = new int[10]
+7	STO
+8	LDA	1	  
+10	LDC	0	  
+12	STO		  			;n=0
+13	LDA	4	  
+15	INPI		  			;read(item)
+16	LDA	4
+18	LDV
+19	LDC	0
+21	CGT		  			;item == 0
+22	BZE	49	  			;while (item != 0) then loop
+24	LDA	0
+26	LDV
+27	LDA	1
+29	LDV
+30	LDXA		  			
+31  LDA	4
+33  LDV
+34  STO                                     ;list[n] = item
+35	LDA	1	  
+37	LDA	1
+39	LDV	
+40	LDC	1
+42	ADD
+43	STO		  			;n=n+1
+44	LDA	4	  
+46	INPI		  			;read(item)
+47  BRN	16
+49	LDA	5
+51	LDC	1
+53	STO		  			;isPalindrome = true
+54	LDA	2	
+56	LDC	0
+58	STO		  			;low=0
+59	LDA	3
+61	LDA	1
+63	LDV		  			;UNPACK n
+64	LDC	1
+66	SUB		  			;n-1
+67	STO		  			;high= n-1
+68	LDA	3	  
+70	LDV
+71	LDA	2
+73	LDV
+74	CGT
+75	BZE	123	  			;while (low < n-1)
+77	LDA	0
+79	LDV
+80	LDA	3
+82	LDV
+83	LDXA		  
+84	LDV		  			;list[high]
+85	LDA	0
+87	LDV
+88	LDA	2
+90	LDV
+91	LDXA
+92	LDV		  			;list[low]
+93	CEQ
+94	BZE	116	  			;if (list[low] != list[high]) jump to 116
+96	LDA	2	  			;else: load address for STO command later
+98	LDA	2	  
+100	LDV		  			;load value of low
+101	LDC	1
+103	ADD		  			;low=low+1
+104	STO		  			;store in address space on stack for low
+105	LDA	3	  			;load address for STO command later
+107	LDC	1
+109	LDA	3
+111	LDV		  			;load value of high
+112	SUB		  			;high-1
+113	STO		  			;store high=high-1  
+114	BRN	68				;Go back and check while condition for loop	  
+116	LDA	5	
+118	LDC 0	
+120	STO		  			;isPalindrome = false
+121	BRN	96
+121	LDA	5
+123 LDV
+124 BZE	129
+126 PRNS	"Palindromic sequence"	        ;else Palindrome
+128 HALT
+129	PRNS	"non-Palindrome sequence"	;write("non-Palindromic sequence")
+131	HALT
+
