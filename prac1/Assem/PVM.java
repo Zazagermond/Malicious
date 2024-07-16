@@ -424,40 +424,45 @@ import library.*;
           case PVM.stl_2:         // pop to local variable 2
           case PVM.stl_3:         // pop to local variable 3
           case PVM.stoc:          // character checked store
- 	  case PVM.inpc:          // character input not checked logic
-		adr = pop();
-		if (inBounds(adr)) {
-			mem[adr] = data.readChar();
-			if (data.error()) ps = badData;
-			}
+ 	 case PVM.inpc:          // character input not checked logic
+			  adr = pop();
+				if (inBounds(adr)) {
+				  mem[adr] = data.readChar();
+				  if (data.error()) ps = badData;
+				}
 
-	    break;
+			    break;
           case PVM.prnc:          // character output
 			  if (tracing) results.write(padding);
-				results.write(pop(), 0);
+				results.write((char)(pop()), 0);
 				if (tracing) results.writeLine(); //not sure to get it to work
 			  break;
           case PVM.cap:           // toUpperCase
           case PVM.low:           // toLowerCase
 			  //pop tos and push it back lowercase(assci +32)
-			  char tos1 = pop();
-			  if ((int)tos1<90 && (int)tos1>64){
-				  push((char)((int)tos1+=32));
-				else{
-					push(tos1);
+			   tos = pop();
+			  if (tos<90 && tos>64){
+				  push((char)(tos+=32));
+			  }else{
+					push((char)tos);
 				}
-			  }
-			  break
+			  
+			  break;
           case PVM.islet:         // isLetter
 			  //pop tos ;check ascii ;push boolean
-			  push(Character.isLetter(pop()));//not sure if i can just do this?
-			  break
+			  tos=pop();
+			if (Character.isLetter((char)tos)){
+				 push(1);
+			}else{
+				push(0);//not sure if i can just do this?
+			}
+			break;
           case PVM.inc:           // ++	
 			  push(pop()+1);
-			  break
+			  break;
           case PVM.dec:           // --	
 			  push(pop()+1);
-			  break
+			  break;
 		  default:              // unrecognized opcode
             ps = badOp;
             break;
