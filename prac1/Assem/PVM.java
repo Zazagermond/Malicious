@@ -427,12 +427,13 @@ import library.*;
  	 case PVM.inpc:          // character input not checked logic
 			  adr = pop();
 				if (inBounds(adr)) {
-				  mem[adr] = data.readChar();
+				  mem[adr] =(int) data.readChar();
+
 				  if (data.error()) ps = badData;
 				}
 
-			    break;
-          case PVM.prnc:          // character output
+			  break;
+    case PVM.prnc:          // character output
 			  if (tracing) results.write(padding);
 				results.write((char)(pop()), 0);
 				if (tracing) results.writeLine(); //not sure to get it to work
@@ -442,9 +443,9 @@ import library.*;
 			  //pop tos and push it back lowercase(assci +32)
 			   tos = pop();
 			  if (tos<90 && tos>64){
-				  push((char)(tos+=32));
+				  push((tos+=32));
 			  }else{
-					push((char)tos);
+					push(tos);
 				}
 			  
 			  break;
@@ -463,10 +464,7 @@ import library.*;
           case PVM.dec:           // --	
 			  push(pop()+1);
 			  break;
-		  default:              // unrecognized opcode
-            ps = badOp;
-            break;
-        }
+
           
 		  default:              // unrecognized opcode
             ps = badOp;
