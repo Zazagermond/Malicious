@@ -1,0 +1,51 @@
+// Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
+// Jad home page: http://www.kpdus.com/jad.html
+// Decompiler options: packimports(3) 
+// Source File Name:   sievej.java
+
+import library.IO;
+
+class sievej
+{
+
+    sievej()
+    {
+    }
+
+    public static void main(String args[])
+    {
+        boolean aflag[] = new boolean[49000];
+        int k1 = 0;
+        IO.write("How many iterations? ");
+        int j1 = IO.readInt();
+        IO.write("Supply largest number to be tested ");
+        int k = IO.readInt();
+        if(k > 49000)
+        {
+            IO.write("n too large, sorry");
+            return;
+        }
+        for(int i1 = 1; i1 <= j1; i1++)
+        {
+            k1 = 0;
+            for(int i = 2; i <= k; i++)
+                aflag[i - 2] = true;
+
+            for(int j = 2; j <= k; j++)
+            {
+                if(!aflag[j - 2])
+                    continue;
+                k1++;
+                int l = j;
+                aflag[l - 2] = false;
+                for(l += j; l <= k; l += j)
+                    aflag[l - 2] = false;
+
+            }
+
+        }
+
+        IO.write(k1);
+        IO.write(" primes");
+    }
+}
