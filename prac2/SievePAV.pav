@@ -39,14 +39,15 @@ int mod(int fac, int operat){
           if (display)
               write(i, "\t");
           k = i;                               // now cross out multiples of i
-          uncrossed[k-2] = false;
-          k =k + i;
-           while (k <= n){
+          //do while statement should be edited
+          uncrossed[k - 2] = false;
+          k = k + i;
+          while (k <= n){
               uncrossed[k-2] = false;
               k = k + i;
-           }
+           }}
           i = i + 1;
-        }
+        
       }
       it=it+1;
       if (display) write("\n");
