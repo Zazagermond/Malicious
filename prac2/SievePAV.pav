@@ -13,7 +13,7 @@ int mod(int fac, int operat){
     bool[] uncrossed = new bool[Max];          // the sieve
     int i, n, k, it, iterations, primes = 0;   // counters
     read("How many iterations? ", iterations);
-    bool display = true;
+    bool display = (iterations == 1);
     //iterations = 1;
     read("Supply largest number to be tested ", n);
     if (n > Max) {
