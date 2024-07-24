@@ -1,5 +1,6 @@
 // Sieve of Eratosthenes for finding primes 2 <= n <= Max (Parva version)
 // P.D. Terry,  Rhodes University, 2017
+//Alisha, Dean , Zaza - Malicious Hadada
 int mod(int fac, int operat){
   int rem, modi;
   modi=fac/operat;
