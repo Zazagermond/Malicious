@@ -1,0 +1,30 @@
+; rot13 encryption of a text terminated with a period
+; uses the enhanced opcodes from Pracs 2 and 3
+; KL Bradshaw, Rhodes University, 2021
+
+   0  DSP    1  ; ch at 0
+   2  LDA    0  ; repeat {
+   4  INPC      ;   read(ch);
+   5  LDL_0
+   6  LOW
+   7  STLC 	 0     ;   ch = lowercase(ch);
+   9  LDL_0
+  10  ISLET
+  11  BZE    29 ;   if (isletter(ch))
+  13  LDC    97
+  15  LDL    0
+  17  LDC    97
+  19  SUB
+  20  LDC    13
+  22  ADD
+  23  LDC    26
+  25  REM
+  26  ADD
+  27  STLC   0      ;      ch = 'a' + (ch - 'a' + 13) % 26;
+  29  LDL_0
+  30  PRNC      ;   write(ch)
+  31  LDL_0
+  32  LDC    46
+  34  CEQ
+  35  BZE    2  ; } until (ch == '.');
+  37  HALT      ; System.Exit(0);

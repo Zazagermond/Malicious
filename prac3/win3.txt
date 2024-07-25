@@ -1,0 +1,3 @@
+[Athletics] Men    "High jump"     (Gianmarco, Italy), (Mutaz-Essa Barshim, Qatar) .
+[Shooting] Mixed   "Team Air rifle 10m" (Qian Yang, China), (Haoran Yang, China) . 
+[Athletics] Mixed  "400m Relay"    (Poland) . 

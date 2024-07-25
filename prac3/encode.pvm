@@ -1,0 +1,35 @@
+; rot13 encryption of a text terminated with a period
+; P.D. Terry, Rhodes University
+   0  DSP    1  ; ch at 0
+   2  LDA    0  ; repeat {
+   4  INPC      ;   read(ch);
+   5  LDA    0
+   7  LDA    0
+   9  LDV
+  10  LOW
+  11  STOC      ;   ch = lowercase(ch);
+  12  LDA    0
+  14  LDV
+  15  ISLET
+  16  BZE    36 ;   if (isletter(ch))
+  18  LDA    0
+  20  LDC    97
+  22  LDA    0
+  24  LDV
+  25  LDC    97
+  27  SUB
+  28  LDC    13
+  30  ADD
+  31  LDC    26
+  33  REM
+  34  ADD
+  35  STOC      ;      ch = 'a' + (ch - 'a' + 13) % 26;
+  36  LDA    0
+  38  LDV
+  39  PRNC      ;   write(ch)
+  40  LDA    0
+  42  LDV
+  43  LDC    46
+  45  CEQ
+  46  BZE    2  ; } until (ch == '.');
+  48  HALT      ; System.Exit(0);

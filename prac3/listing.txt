@@ -1,0 +1,24 @@
+
+   1 COMPILER Calc  $CN
+   2 /* Simple arithmetic calculator
+   3    P.D. Terry, Rhodes University extended by KB 2021 */
+   4 
+   5 CHARACTERS
+   6   digit      = "0123456789" .
+   7   hexdigit   =digit +"ABCDEF" .
+   8   
+   9 TOKENS
+  10   decNumber  = digit { digit } .
+  11   hexNumber  = "0" hexdigit {hexdigit} "H".
+  12 
+  13 IGNORE CHR(0) .. CHR(31)
+  14 
+  15 PRODUCTIONS
+  16   Calc       = { Expression "=" } EOF .
+  17   Expression = Term { "+" Term  |  "-" Term } .
+  18   Term       = UpFactor { "*" UpFactor |  "/" UpFactor | "%" UpFactor } .
+  19   UpFactor   =Factor{ "^" Factor} .
+  20   Factor     = decNumber|hexNumber | "(" Expression ")" | "sqrt" "(" Expression ")" .
+  21 END Calc.
+
+0 errors detected
