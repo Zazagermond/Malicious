@@ -1,0 +1,21 @@
+COMPILER Staff  $CN
+CHARACTERS
+cletter		=	"ABCDEFGHIJKLMNOPQRSTUVWXYZ" .
+lletter		=	"abcdefghijklmnopqrstuvwxyz" .
+
+TOKENS
+name		=	cletter lletter{lletter} .
+initial		=	cletter .
+
+IGNORE CHR(0) .. CHR(31)
+
+PRODUCTIONS
+	Staff 		=	{{TitleName|Name}["," (Qualif|Qualif "(hons)")] "."} EOF .
+	TitleName	=	Title Name .
+	Title		=	"Prof"|"Dr"|"Professor"|"Mr"|"Mrs"|"Ms".
+	Name		=	[Initial|Initial Name] name { name } .
+	Initial		=	initial "."{initial "."} .
+	Qualif		=	"BSc"|"MSc"|"PhD"|"BJrn"|"BSc," Qualif|"MSc," Qualif|"PhD," Qualif|"BJrn," Qualif.
+	
+
+END Staff .
