@@ -1,0 +1,26 @@
+COMPILER olympics  $CN
+CHARACTERS
+  letter = "abcdefghijklmnopqrstuvwxyz-" .
+  Upletter ="ABCDEFGHIJKLMNOPQRSTUVWXYZ" .
+  digit      = "0123456789" .
+  
+TOKENS
+		
+	name= Upletter letter{letter}.
+	allcap=Upletter{Upletter} .
+	word = letter{letter}.
+	distance =digit{digit} "m" .
+	date =digit{digit}.
+	
+IGNORE CHR(0) .. CHR(31)
+  PRODUCTIONS
+	olympics = {Start} EOF.
+	Start = Discipline Gender ['"'Subevent'"'] athelte [ "," athelte] ["WR/" Date|"OR/" Date] "." .
+	athelte= "(" Word ["," Word ]")" .
+	Discipline = "["  name "]" .
+	Gender = "Mixed"|"Women"| "Men" .
+	Subevent = [distance] name{name|word} [distance] .
+	Word = name{name}|allcap .
+	
+	Date= date.
+END olympics.
