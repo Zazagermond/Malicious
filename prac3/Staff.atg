@@ -13,8 +13,8 @@ TOKENS
 IGNORE CHR(0) .. CHR(31)
   PRODUCTIONS
   Staff= {Start} EOF.
-  Start	= ([Title] Person {Degeelist} ".") .
-  Degeelist = "," ( "PhD" | "BSc"| "MSc"| "BJrn"| "BSc(Hons)").
+  Start	= ([Title] Person {Degeelist ["(Hons)"]} ".") .
+  Degeelist = "," ( "PhD" | "BSc"| "MSc"| "BJrn").
   Title = "Dr"|"Professor"|"Prof"| "Ms"|"Mrs"|"Mr" .	
   Intails = intails "."{intails "."} .
   Person = [Intails | Intails Person]name{name} {Person} .
