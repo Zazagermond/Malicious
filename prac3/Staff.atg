@@ -1,22 +1,24 @@
 COMPILER Staff  $CN
 /* Malicious Hadada: Alisha, Dean, Zaza */
+
 CHARACTERS
-cletter		=	"ABCDEFGHIJKLMNOPQRSTUVWXYZ" .
-lletter		=	"abcdefghijklmnopqrstuvwxyz" .
+  letter = "abcdefghijklmnopqrstuvwxyz" .
+  Upletter ="ABCDEFGHIJKLMNOPQRSTUVWXYZ" .
+
 
 TOKENS
-name		=	cletter lletter{lletter} .
-initial		=	cletter .
+  name= Upletter letter{letter}.
+  intails = Upletter   .
 
 IGNORE CHR(0) .. CHR(31)
+  PRODUCTIONS
+  Staff= {Start} EOF.
+  Start	= ([Title] Person {Degeelist} ".") .
+  Degeelist = "," ( "PhD" | "BSc"| "MSc"| "BJrn"| "BSc(Hons)").
+  Title = "Dr"|"Professor"|"Prof"| "Ms"|"Mrs"|"Mr" .	
+  Intails = intails "."{intails "."} .
+  Person = [Intails | Intails Person]name{name} {Person} .
+  
+  
 
-PRODUCTIONS
-	Staff 		=	{{TitleName|Name}["," (Qualif|Qualif "(hons)")] "."} EOF .
-	TitleName	=	Title Name .
-	Title		=	"Prof"|"Dr"|"Professor"|"Mr"|"Mrs"|"Ms".
-	Name		=	[Initial|Initial Name] name { name } .
-	Initial		=	initial "."{initial "."} .
-	Qualif		=	"BSc"|"MSc"|"PhD"|"BJrn"|"BSc," Qualif|"MSc," Qualif|"PhD," Qualif|"BJrn," Qualif.
-	
-
-END Staff .
+END Staff.
