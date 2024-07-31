@@ -125,6 +125,7 @@ class PVM {
 
   static String padding = "                                                               ";
   static final int maxInt = Integer.MAX_VALUE;
+  static final int minInt = Integer.MIN_VALUE; //added min values for ints
   static final int maxChar = 255;
 
   static void stackDump(OutFile results, int pcNow) {
@@ -194,11 +195,10 @@ class PVM {
       case PVM.lda:
       case PVM.prns:
       case PVM.brn:
-      case PVM.bze:          
+      case PVM.bze:
       case PVM.ldl:
       case PVM.stl:
-      case PVM.stlc: 
-      
+      case PVM.stlc:
         results.write(mem[cpu.pc], 7);
         break;
       default:
@@ -382,14 +382,13 @@ class PVM {
             results.writeLine();
           break;
         // ++
-        case PVM.inpc: // character input
-          adr = pop();
-          if (inBounds(adr)) {
-            mem[adr] = data.readChar();
-            if (data.error())
-              ps = badData;
-          }
-          break;
+        case PVM.inpc:          // character input not checked logic
+            adr = pop();
+            if (inBounds(adr)) {
+              mem[adr] =(int) data.readChar();
+              if (data.error()) ps = badData;
+            }
+            break;
         case PVM.prnc: // character output
           if (tracing)
             results.write(padding);
@@ -544,103 +543,81 @@ class PVM {
           break;
         case PVM.lda_0: // push local address 0
           adr = cpu.fp - 1 - 0;
-          if (inBounds(adr))
-            push(adr);
+          push(adr);
           break;
         case PVM.lda_1: // push local address 1
           adr = cpu.fp - 1 - 1;
-          if (inBounds(adr))
-            push(adr);
+          push(adr);
           break;
         case PVM.lda_2: // push local address 2
           adr = cpu.fp - 1 - 2;
-          if (inBounds(adr))
-            push(adr);
+          push(adr);
           break;
         case PVM.lda_3: // push local address 3
           adr = cpu.fp - 1 - 3;
-          if (inBounds(adr))
-            push(adr);
+          push(adr);
           break;
         case PVM.ldl: // push local value
-          int Offset = next();
-          adr = cpu.fp - 1 - Offset;
-          if (inBounds(adr)) {
-            push(mem[adr]);
-          }
+          push(mem[cpu.fp -1 - next()]);
           break;
         case PVM.ldl_0: // push value of local variable 0
-          adr = cpu.fp - 1 - 0;
+          adr = cpu.fp - 1;
           if (inBounds(adr))
             push(mem[adr]);
           break;
         case PVM.ldl_1: // push value of local variable 1
-          adr = cpu.fp - 1 - 1;
-          if (inBounds(adr))
-            push(mem[adr]);
+          adr = cpu.fp - 1 -1;
+          push(mem[adr]);
           break;
         case PVM.ldl_2: // push value of local variable 2
           adr = cpu.fp - 1 - 2;
-          if (inBounds(adr))
-            push(mem[adr]);
+          push(mem[adr]);
           break;
         case PVM.ldl_3: // push value of local variable 3
           adr = cpu.fp - 1 - 3;
-          if (inBounds(adr))
-            push(mem[adr]);
+          push(mem[adr]);
           break;
         case PVM.stl: // store local value
           adr = cpu.fp - 1 - next();
-          tos = pop();
-          if (inBounds(adr))
-            mem[adr] = tos;
+          mem[adr] = pop();
           break;
         case PVM.stlc: // store local value
-          adr = cpu.fp - 1 - next();
-          tos = (char) pop();
-          if (inBounds(adr))
-            mem[adr] = tos;
+          adr = next();
+          mem[cpu.fp - 1 - adr] = (char) pop();
           break;
         case PVM.stl_0: // pop to local variable 0
           adr = cpu.fp - 1 - 0;
-          tos = pop();
-          if (inBounds(adr))
-            mem[adr] = tos;
+          mem[adr] = pop();
           break;
         case PVM.stl_1: // pop to local variable 1
           adr = cpu.fp - 1 - 1;
-          tos = pop();
-          if (inBounds(adr))
-            mem[adr] = tos;
+          mem[adr] = pop();
           break;
         case PVM.stl_2: // pop to local variable 2
-          adr = cpu.fp - 1 - 1;
-          tos = pop();
-          if (inBounds(adr))
-            mem[adr] = tos;
+          adr = cpu.fp - 1 -2;
+          mem[adr] = pop();
           break;
         case PVM.stl_3: // pop to local variable 3
-          adr = cpu.fp - 1 - 1;
-          tos = pop();
-          if (inBounds(adr))
-            mem[adr] = tos;
+          adr = cpu.fp - 1 - 3;
+          mem[adr] = pop();
           break;
         // ++
         case PVM.stoc: // character checked store
           tos = pop();
-          adr = pop();
-          if (inBounds(adr))
-            if (tos >= 0 && tos <= maxChar)
-              mem[adr] = tos;
-            else
-              ps = badVal;
+          mem[pop()] = (char) tos;
           break;
         // ++
 
         // ++
-        case PVM.low: // toLowerCase
-          push(Character.toLowerCase((char) pop()));
-          break;
+        case PVM.low:           // toLowerCase
+            //pop tos and push it back lowercase(assci +32)
+            tos = pop();
+            if (tos<90){
+              push((char)tos);
+            }else{
+              push((char)(tos+32));
+            }
+            break;
         case PVM.islet: // isLetter
           tos = pop();
           push(Character.isLetter((char) tos) ? 1 : 0);
