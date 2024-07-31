@@ -1,4 +1,5 @@
 COMPILER olympics  $CN
+/* Malicious Hadada: Alisha, Dean, Zaza */
 CHARACTERS
   letter = "abcdefghijklmnopqrstuvwxyz-" .
   Upletter ="ABCDEFGHIJKLMNOPQRSTUVWXYZ" .
