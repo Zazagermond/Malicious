@@ -3,6 +3,9 @@
 // Modified by KL Bradshaw for Prac 2, 2021
 // Solution no changes
 
+//Malicouios hadida: Alisha, Dean, Zaza
+//Changed lines: 125-128
+
 package Assem;
 
 import java.io.*;
@@ -119,7 +122,11 @@ import library.*;
             case PVM.brn:                            // all require numeric address field
             case PVM.bze:
             case PVM.dsp:
-            case PVM.lda:
+            case PVM.lda:            
+            case PVM.ldl:
+            case PVM.stl:
+            case PVM.stlc:
+
             case PVM.ldc:
               codeLen = (codeLen + 1) % PVM.memSize;
               if (ch == '\n')                        // no field could be found
