@@ -1,0 +1,7 @@
+COMPILER Palin1 $CNF
+IGNORE CHR(0) .. CHR(31)
+PRODUCTIONS
+  
+  Palin1 = "a" F "a" | "b" F "b" .
+F = Palin1| .
+END Palin1.

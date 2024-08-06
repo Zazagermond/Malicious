@@ -1,0 +1,10 @@
+
+   1   void Main () {
+   2   // Demonstrate syntax for various loops
+   3   // (not supposed to do anything useful!) Is this correct??
+   4     int i , k = 9 , 0;
+****                     ^ identifier expected
+   5 
+   6   } // Main
+
+1 errors detected
