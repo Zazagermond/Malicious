@@ -38,7 +38,7 @@
     Assignment        = Designator {"," Expression } OpAssignment Expression { "," Expression} ";" .
 	OpAssignment      = "="|"+="|"-="|"*="|"/=" .
     Designator        = identifier [ "[" Expression "]" ] .
-    IfStatement       ="if" "(" Condition ")" Statement {"elsif" "(" Condition ")" Statement} {"else" Statement} .
+    IfStatement       ="if" "(" Condition ")" Statement {"elsif" "(" Condition ")" Statement} ["else" Statement] .
     WhileStatement    = "while" "(" Condition ")" Statement .
     DoWhileStatement  = "do"  Statement "while" "(" Condition ")" ";" . 
 	ForLoopStatement  = "for" Expression "=" Expression ("to"|"downto") Expression "do" Statement .
