@@ -1,0 +1,10 @@
+BEGIN
+		DSP 2
+start:	LDA 0
+		LDC 4
+		STO
+		BZE start
+		LDA 1
+		LDV
+		PRNI
+END .		

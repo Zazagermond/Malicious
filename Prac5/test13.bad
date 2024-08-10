@@ -1,0 +1,22 @@
+BEGIN
+ start: DSP 2
+		LDA 0
+		LDC 
+		4
+		STO
+ loop:  LDA 1
+		LDA 1
+		LDV
+		LDC 1
+		ADD
+		STO
+		LDA 0
+		LDV
+		LDA 1
+		LDV
+		CEQ
+		BZE loop
+		LDA 1
+		LDV
+		PRNI
+END .		

@@ -1,0 +1,28 @@
+COMPILER PVMlike $NC
+/* Simple grammar for the PVM with labels -- prac 5 2021
+   KL Bradshaw 2021, extended from version by PD Terry */
+
+CHARACTERS
+  lf 		 = CHR(10).
+  letter     = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" .
+  digit      = "0123456789" .
+ 
+TOKENS
+  identifier = letter { letter | digit } .
+  number     = [ '+' | '-' ] digit { digit } .
+  label      = letter { letter | digit } ":" .
+  EOL        = lf .
+  
+COMMENTS FROM  ";" TO lf    /* comments are from the ; symbol to the end of line  */
+
+IGNORE CHR(9) .. CHR(13) - lf
+
+PRODUCTIONS
+
+  PVMlike  	= { EOL } "BEGIN" { EOL }   { Statement }  "END" { EOL } "."  { EOL } .
+  Statement = [label] (OneWord | TwoWord | Branch ) EOL .
+  OneWord   = (    "ADD"  | "CEQ"  | "CNE" | "INPI" | "LDV"  | "PRNI" | "STO" )  .
+  TwoWord   = ( "DSP" | "LDC" | "LDA" )  number  .
+  Branch   	= ( "BRN" | "BZE" ) ( number  | identifier ) .
+
+END PVMlike.
