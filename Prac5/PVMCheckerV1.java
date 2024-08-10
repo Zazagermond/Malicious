@@ -133,7 +133,7 @@ class PVMChecker {
         symLex.append(ch);
         getChar();
       } while (letterSet.contains(ch) || digitSet.contains(ch)); // Continue if it's a letter or digit
-
+//caution double check
       String lexeme = symLex.toString();
       if (keywords.contains(lexeme)) {
         symKind = identifyKeyword(lexeme);
@@ -210,26 +210,104 @@ class PVMChecker {
   }
 
 
-  /*
-   * ++++ Commented out for the moment
-   * 
-   * // +++++++++++++++++++++++++++++++ Parser +++++++++++++++++++++++++++++++++++
-   * 
-   * static void accept(int wantedSym, String errorMessage) {
-   * // Checks that lookahead token is wantedSym
-   * if (sym.kind == wantedSym) getSym(); else abort(errorMessage);
-   * } // accept
-   * 
-   * static void accept(IntSet allowedSet, String errorMessage) {
-   * // Checks that lookahead token is in allowedSet
-   * if (allowedSet.contains(sym.kind)) getSym(); else abort(errorMessage);
-   * } // accept
-   * 
-   * static void PVMlike() {}
-   * 
-   * ++++++
-   */
+  
+   // ++++ Commented out for the moment
+   
+    // +++++++++++++++++++++++++++++++ Parser +++++++++++++++++++++++++++++++++++
+    
+    static void accept(int wantedSym, String errorMessage) {
+    // Checks that lookahead token is wantedSym
+    if (sym.kind == wantedSym) getSym(); else abort(errorMessage);
+    } // accept
+    
+    static void accept(IntSet allowedSet, String errorMessage) {
+    // Checks that lookahead token is in allowedSet
+    if (allowedSet.contains(sym.kind)) getSym(); else abort(errorMessage);
+    } // accept
+   
+    static void PVMlike() {
+    // { EOL } "BEGIN" { EOL } { Statement } "END" { EOL } "." { EOL }.
+      while (sym.kind==eolSym){
+        getSym();
+      }
+      accept(beginSym,"BEGIN expected");
+      while (sym.kind==eolSym){
+        getSym();
+      }
+      
+      while (Statement.contains(sym.kind)){//
+        Statement();
+      }
+      accept(endSym,"END expected");
+      while (sym.kind==eolSym){
+        getSym();
+      }
+      accept(periodSym,". expected");
+      while (sym.kind==eolSym){
+        getSym();
+      }
+    }
 
+    static void Statement() {
+    //Statement = [label] (OneWord | TwoWord | Branch ) EOL . 
+    if (sym.kind==labelSym){
+      getSym();
+    }
+    if (OneWord.contains(sym.kind)){
+      getSym();
+    } else if (TwoWordWord.contains(sym.kind)){
+      getSym();
+    } else if (Branch.contains(sym.kind)){
+      getSym();
+    }                   //replace with switch
+    accept(eolSym,"EOL expected" );
+    }
+  
+    static void OneWord(){
+    //OneWord = ( "ADD" | "CEQ" | "CNE" | "INPI" | "LDV" | "PRNI" | "STO" ) . 
+    switch (sym.kind){
+      case addSym:
+        getSym();
+      case ceqSym:
+        getSym();
+      case cneSym:
+        getSym();
+      case inpiSym:
+        getSym();
+      case ldvSym:
+        getSym();
+      case prniSym:
+        getSym();
+      case stoSym:
+        getSym();
+      default:
+        abort("Invalid vaule for oneword");
+      }
+    }
+
+    static void TwoWord(){
+    //TwoWord = ( "DSP" | "LDC" | "LDA" ) number .
+    if (sym.kind= dspSym || ldcSym || ldaSym){
+      getSym();
+    } else{
+      abort("Invalid start to twowords");
+    }
+    accept(numSym,"number expected");
+    }
+
+    static void Branch(){
+    //Branch = ( "BRN" | "BZE" ) ( number | identifier ) . 
+    if (sym.kind= brnSym || bzeSym ){
+      getSym();
+    } else{
+      abort("Invalid start to twowords");
+    }
+    if (sym.kind= numSym || identSym ){
+      getSym();
+    } else{
+      abort("Invalid start to twowords");
+    }
+    }
   // +++++++++++++++++++++ Main driver function +++++++++++++++++++++++++++++++
 
   public static void main(String[] args) {
@@ -250,7 +328,9 @@ class PVMChecker {
       OutFile.StdOut.write(sym.kind, 3);
       OutFile.StdOut.writeLine(" " + sym.val);
     } while (sym.kind != EOFSym);
-
+    getSym(); // Lookahead symbol
+    PVMlike(); // Start to parse from the goal symbol
+    System.out.println("Parsed correctly");
     /*
      * After the scanner is debugged, comment out lines 127 to 131 and uncomment
      * lines 135 to 138.
