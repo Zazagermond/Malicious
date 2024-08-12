@@ -214,23 +214,98 @@ class PVMChecker {
    * ++++ Commented out for the moment
    * 
    * // +++++++++++++++++++++++++++++++ Parser +++++++++++++++++++++++++++++++++++
-   * 
-   * static void accept(int wantedSym, String errorMessage) {
-   * // Checks that lookahead token is wantedSym
-   * if (sym.kind == wantedSym) getSym(); else abort(errorMessage);
-   * } // accept
-   * 
-   * static void accept(IntSet allowedSet, String errorMessage) {
-   * // Checks that lookahead token is in allowedSet
-   * if (allowedSet.contains(sym.kind)) getSym(); else abort(errorMessage);
-   * } // accept
-   * 
-   * static void PVMlike() {}
-   * 
-   * ++++++
-   */
+   */ 
+    static void accept(int wantedSym, String errorMessage) {
+    // Checks that lookahead token is wantedSym
+    if (sym.kind == wantedSym) getSym(); else abort(errorMessage);
+    } // accept
+   
+    static void accept(IntSet allowedSet, String errorMessage) {
+    //Checks that lookahead token is in allowedSet
+   if (allowedSet.contains(sym.kind)) getSym(); else abort(errorMessage);
+    } // accept
+    
+    static void PVMlike() {
+    //PVMlike() = {EOL} "BEGIN" {EOL} {Statement} "END" {EOL} "." {EOL}
+    if (sym.kind==eolSym||sym.kind==beginSym){
+      if (sym.kind==eolSym){
+          do{
+            accept(eolSym,"EOL Expected"); 
+          }while (sym.kind==eolSym);
+      }
+          accept(beginSym, "BEGIN Expected" );
+      if (sym.kind==eolSym){
+          do{
+            accept(eolSym,"EOL Expected"); 
+            
+          }while (sym.kind==eolSym);
+      }
+      if (sym.kind!=endSym){
+        do{
+          Statement();
+        }while (sym.kind!=endSym);
+      }
+          accept(endSym,"END Expected");
+          
+          do{
+                accept(eolSym, "EOL Expected");
+                
+            } while (sym.kind==eolSym);
+          accept(periodSym,"Period expected");
+          
+          do{
+                accept(eolSym, "EOL Expected");
+                
+            } while (sym.kind==eolSym);
+          sym.kind=EOFSym;
+    }else{
+          abort("Expected PVMlike()");
+        }
+    }
+
+    //Statement = [label] (OneWord | TwoWord | Branch ) EOL . 
+    //"ADD" | "CEQ" | "CNE" | "INPI" | "LDV" | "PRNI" | "STO" | "DSP" | "LDC" | "LDA" ( "BRN" | "BZE" ) ( number | identifier
+    static void Statement(){
+      if (sym.kind==labelSym){
+        accept(labelSym, "Label expected");
+      }
+      switch(sym.kind){
+          case addSym:
+          case ceqSym:
+          case cneSym:
+          case inpiSym:
+          case ldvSym:
+          case prniSym:
+          case stoSym:
+            accept(sym.kind, "OneWord expected");
+            break;
+          case dspSym:
+          case ldcSym:
+          case ldaSym:
+            accept(sym.kind, "TwoWord expected");
+            accept(numSym, "Num expected");
+            break;
+          case brnSym:
+          case bzeSym:
+            accept(sym.kind, "Branch expected");
+            if (sym.kind==numSym){
+              accept(numSym, "Num expected");
+            }else if (sym.kind==identSym){
+              accept(identSym, "Identifier expected");
+            }else{
+              abort("Invalid Branch statement");  
+            }
+            
+            break;
+      }
+      accept(eolSym,("Failed at this point: "+sym.kind)); //seems to have a problem with eol
+    }
+
+   
 
   // +++++++++++++++++++++ Main driver function +++++++++++++++++++++++++++++++
+  //PVMlike() = {EOL} "BEGIN" {EOL} {Statement} "END" {EOL} "." {EOL} 
+ 
 
   public static void main(String[] args) {
     // Open input and output files from command line arguments
@@ -245,23 +320,23 @@ class PVMChecker {
 
     // To test the scanner we can use a loop like the following:
 
-    do {
+    /*do {
       getSym(); // Lookahead symbol
       OutFile.StdOut.write(sym.kind, 3);
       OutFile.StdOut.writeLine(" " + sym.val);
     } while (sym.kind != EOFSym);
-
+     */
     /*
      * After the scanner is debugged, comment out lines 127 to 131 and uncomment
      * lines 135 to 138.
      * In other words, replace the code immediately above with this code:
-     * 
-     * getSym(); // Lookahead symbol
-     * PVMlike(); // Start to parse from the goal symbol
-     * // if we get back here everything must have been satisfactory
-     * System.out.println("Parsed correctly");
-     * 
-     */
+     */ 
+      getSym(); // Lookahead symbol
+      PVMlike(); // Start to parse from the goal symbol
+      // if we get back here everything must have been satisfactory
+      System.out.println("Parsed correctly");
+      
+     
     output.close();
   } // main
 
