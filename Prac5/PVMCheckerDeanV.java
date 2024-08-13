@@ -152,7 +152,10 @@ class PVMChecker {
       } while (digitSet.contains(ch));
       symKind = numSym;
 
-    } else if (singleCharSymbols.contains(ch)) { // Single-character symbols
+    } 
+    else if (ch==';'){
+        symKind=semicolonSym;
+    }else if(singleCharSymbols.contains(ch)) { // Single-character symbols
       symLex.append(ch);
       sym.kind = identifySingleCharSymbol(ch);
       getChar();
@@ -207,7 +210,7 @@ class PVMChecker {
       case ')' -> rparenthSym; // Replace 'noSym' with the correct symbol for right parenthesis if defined
       case ':' -> noSym; // Replace 'noSym' with the correct symbol for colon if defined
       case ',' -> noSym; // Replace 'noSym' with the correct symbol for comma if defined
-      case ';' -> if sym.kindsemicolonSym; // Replace 'noSym' with the correct symbol for semicolon if defined
+      case ';' -> semicolonSym; // Replace 'noSym' with the correct symbol for semicolon if defined
       case '.' -> periodSym;
       default -> noSym; // If no match, return noSym as a default
     };
@@ -275,7 +278,11 @@ class PVMChecker {
     }
     static void Comment(){
           accept(semicolonSym,"Semicolon expected");
-          accept(eolSym,"EOL expected");
+          if (sym.kind==eolSym){
+            accept(eolSym,"EOL expected");
+          }else{
+            getSym();
+          }
     }
     static void Statement() {
     //Statement = [label] (OneWord | TwoWord | Branch ) EOL . 
