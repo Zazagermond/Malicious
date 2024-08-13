@@ -8,7 +8,7 @@ import java.util.*;
 import library.*;
 
 class Token {
-  public int kind;
+  public int kind=0;
   public String val;
 
   public Token(int kind, String val) {
@@ -20,7 +20,7 @@ class Token {
 
 class PVMChecker {
 
-  // +++++++++++++++++++++++++ File Handling and Error handlers
+  // +++++++++++++++++++++++++ File Handling and Er ror handlers
   // ++++++++++++++++++++
 
   static InFile input;
@@ -113,7 +113,7 @@ class PVMChecker {
   } // getChar
 
   // +++++++++++++++++++++++++++++++ Scanner ++++++++++++++++++++++++++++++++++
-
+   
   // Declaring sym as a global variable is done for simplicity - global variables
   // are not always a good thing
 
@@ -126,14 +126,14 @@ class PVMChecker {
       getChar(); // Need to check EOL, so can't ignore it
 
     StringBuilder symLex = new StringBuilder();
-    int symKind = noSym;
+     int symKind = noSym;
 
     if (letterSet.contains(ch)) { // Identifier or keyword
       do {
         symLex.append(ch);
         getChar();
       } while (letterSet.contains(ch) || digitSet.contains(ch)); // Continue if it's a letter or digit
-
+//caution double check
       String lexeme = symLex.toString();
       if (keywords.contains(lexeme)) {
         symKind = identifyKeyword(lexeme);
@@ -150,7 +150,7 @@ class PVMChecker {
 
     } else if (singleCharSymbols.contains(ch)) { // Single-character symbols
       symLex.append(ch);
-      symKind = identifySingleCharSymbol(ch);
+      sym.kind = identifySingleCharSymbol(ch);
       getChar();
 
     } else if (ch == EOF) {
@@ -210,102 +210,129 @@ class PVMChecker {
   }
 
 
-  /*
-   * ++++ Commented out for the moment
-   * 
-   * // +++++++++++++++++++++++++++++++ Parser +++++++++++++++++++++++++++++++++++
-   */ 
+  
+   // ++++ Commented out for the moment
+   
+    // +++++++++++++++++++++++++++++++ Parser +++++++++++++++++++++++++++++++++++
+    
     static void accept(int wantedSym, String errorMessage) {
     // Checks that lookahead token is wantedSym
     if (sym.kind == wantedSym) getSym(); else abort(errorMessage);
     } // accept
-   
-    static void accept(IntSet allowedSet, String errorMessage) {
-    //Checks that lookahead token is in allowedSet
-   if (allowedSet.contains(sym.kind)) getSym(); else abort(errorMessage);
-    } // accept
     
-    static void PVMlike() {
-    //PVMlike() = {EOL} "BEGIN" {EOL} {Statement} "END" {EOL} "." {EOL}
-    if (sym.kind==eolSym||sym.kind==beginSym){
-      if (sym.kind==eolSym){
-          do{
-            accept(eolSym,"EOL Expected"); 
-          }while (sym.kind==eolSym);
-      }
-          accept(beginSym, "BEGIN Expected" );
-      if (sym.kind==eolSym){
-          do{
-            accept(eolSym,"EOL Expected"); 
-            
-          }while (sym.kind==eolSym);
-      }
-      if (sym.kind!=endSym){
-        do{
-          Statement();
-        }while (sym.kind!=endSym);
-      }
-          accept(endSym,"END Expected");
-          
-          do{
-                accept(eolSym, "EOL Expected");
-                
-            } while (sym.kind==eolSym);
-          accept(periodSym,"Period expected");
-          
-          do{
-                accept(eolSym, "EOL Expected");
-                
-            } while (sym.kind==eolSym);
-          sym.kind=EOFSym;
-    }else{
-          abort("Expected PVMlike()");
-        }
-    }
-
-    //Statement = [label] (OneWord | TwoWord | Branch ) EOL . 
-    //"ADD" | "CEQ" | "CNE" | "INPI" | "LDV" | "PRNI" | "STO" | "DSP" | "LDC" | "LDA" ( "BRN" | "BZE" ) ( number | identifier
-    static void Statement(){
-      if (sym.kind==labelSym){
-        accept(labelSym, "Label expected");
-      }
-      switch(sym.kind){
-          case addSym:
-          case ceqSym:
-          case cneSym:
-          case inpiSym:
-          case ldvSym:
-          case prniSym:
-          case stoSym:
-            accept(sym.kind, "OneWord expected");
-            break;
-          case dspSym:
-          case ldcSym:
-          case ldaSym:
-            accept(sym.kind, "TwoWord expected");
-            accept(numSym, "Num expected");
-            break;
-          case brnSym:
-          case bzeSym:
-            accept(sym.kind, "Branch expected");
-            if (sym.kind==numSym){
-              accept(numSym, "Num expected");
-            }else if (sym.kind==identSym){
-              accept(identSym, "Identifier expected");
-            }else{
-              abort("Invalid Branch statement");  
-            }
-            
-            break;
-      }
-      accept(eolSym,("Failed at this point: "+sym.kind)); //seems to have a problem with eol
-    }
-
+    static void accept(IntSet allowedSet, String errorMessage) {
+    // Checks that lookahead token is in allowedSet
+    if (allowedSet.contains(sym.kind)) getSym(); else abort(errorMessage);
+    } // accept
    
+    static void PVMlike() {
+    // { EOL } "BEGIN" { EOL } { Statement } "END" { EOL } "." { EOL }.
+    IntSet Statements = new IntSet(labelSym,ldaSym, ldcSym, dspSym,addSym, ceqSym, cneSym,inpiSym ,ldvSym,prniSym, stoSym,brnSym,bzeSym);
+      while (sym.kind==eolSym){
+        getSym(); 
+      }
+      accept(beginSym,"BEGIN expected");
+      while (sym.kind==eolSym){
+        getSym();
+      }
+      
+      while (Statements.contains(sym.kind)){//
+        Statement();
+        if (sym.kind == endSym){
+          while (sym.kind==eolSym){
+            getSym();
+          }
+          accept(periodSym,". expected");
+          while (sym.kind==eolSym){
+            getSym();
+          }
+        }accept(endSym,"END expected");
+      }
+      
+    }
 
+    static void Statement() {
+    //Statement = [label] (OneWord | TwoWord | Branch ) EOL . 
+    IntSet TwoWords = new IntSet(ldaSym, ldcSym, dspSym);
+    IntSet OneWords = new IntSet(addSym, ceqSym, cneSym,inpiSym ,ldvSym,prniSym, stoSym);
+    IntSet Branchs = new IntSet(brnSym,bzeSym);
+    if (sym.kind==labelSym){
+      getSym();
+    }
+    if (OneWords.contains(sym.kind)){
+      OneWord();
+    } else if (TwoWords.contains(sym.kind)){
+      TwoWord();
+    } else if (Branchs.contains(sym.kind)){
+      Branch();
+    }else 
+    {abort("Statement wrong");
+     }                   //replace with switch
+    accept(eolSym,"EOL expected" );
+    }
+  
+    static void OneWord(){
+    //OneWord = ( "ADD" | "CEQ" | "CNE" | "INPI" | "LDV" | "PRNI" | "STO" ) . 
+    switch (sym.kind){
+      case addSym:
+        getSym();
+      case ceqSym:
+        getSym();
+      case cneSym:
+        getSym();
+      case inpiSym:
+        getSym();
+      case ldvSym:
+        getSym();
+      case prniSym:
+        getSym();
+      case stoSym:
+        getSym();
+      default:
+        abort("Invalid vaule for oneword");
+      }
+    }
+
+    static void TwoWord(){
+    //TwoWord = ( "DSP" | "LDC" | "LDA" ) number .
+    switch (sym.kind){
+      case dspSym:
+        getSym();
+      case ldcSym:
+        getSym();
+      case ldaSym:
+        getSym();
+      
+      default:
+        abort("Invalid start to twowords");
+      }
+    accept(numSym,"number expected");
+    }
+    
+    
+
+    static void Branch(){
+    //Branch = ( "BRN" | "BZE" ) ( number | identifier ) . 
+    switch (sym.kind){
+      case brnSym:
+        getSym();
+      case bzeSym:
+        getSym();
+      default:
+        abort("Invalid start to branch");
+      }
+    
+    
+   switch (sym.kind){
+      case numSym:
+        getSym();
+      case identSym:
+        getSym();
+      default:
+        abort("Invalid start to branch");
+      }
+    }
   // +++++++++++++++++++++ Main driver function +++++++++++++++++++++++++++++++
-  //PVMlike() = {EOL} "BEGIN" {EOL} {Statement} "END" {EOL} "." {EOL} 
- 
 
   public static void main(String[] args) {
     // Open input and output files from command line arguments
@@ -325,18 +352,21 @@ class PVMChecker {
       OutFile.StdOut.write(sym.kind, 3);
       OutFile.StdOut.writeLine(" " + sym.val);
     } while (sym.kind != EOFSym);
-     */
+    */
+    getSym(); // Lookahead symbol
+    PVMlike(); // Start to parse from the goal symbol
+    System.out.println("Parsed correctly");
     /*
      * After the scanner is debugged, comment out lines 127 to 131 and uncomment
      * lines 135 to 138.
      * In other words, replace the code immediately above with this code:
-     */ 
-      getSym(); // Lookahead symbol
-      PVMlike(); // Start to parse from the goal symbol
-      // if we get back here everything must have been satisfactory
-      System.out.println("Parsed correctly");
-      
-     
+     * 
+     * getSym(); // Lookahead symbol
+     * PVMlike(); // Start to parse from the goal symbol
+     * // if we get back here everything must have been satisfactory
+     * System.out.println("Parsed correctly");
+     * 
+     */
     output.close();
   } // main
 
