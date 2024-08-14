@@ -1,6 +1,7 @@
 // Do learn to insert your names and a brief description of
 // what the program is supposed to do!
-
+//Alisha, Dean, and Zaza: The malicious Hadadas
+//changed lines 116-171 (Scanner).
 // This is a skeleton program for developing a parser for checking PVMlike files
 // KL Bradshaw 2021
 
@@ -214,124 +215,7 @@ class PVMChecker {
    // ++++ Commented out for the moment
    
     // +++++++++++++++++++++++++++++++ Parser +++++++++++++++++++++++++++++++++++
-    
-    static void accept(int wantedSym, String errorMessage) {
-    // Checks that lookahead token is wantedSym
-    if (sym.kind == wantedSym) getSym(); else abort(errorMessage);
-    } // accept
-    
-    static void accept(IntSet allowedSet, String errorMessage) {
-    // Checks that lookahead token is in allowedSet
-    if (allowedSet.contains(sym.kind)) getSym(); else abort(errorMessage);
-    } // accept
-   
-    static void PVMlike() {
-    // { EOL } "BEGIN" { EOL } { Statement } "END" { EOL } "." { EOL }.
-    IntSet Statements = new IntSet(labelSym,ldaSym, ldcSym, dspSym,addSym, ceqSym, cneSym,inpiSym ,ldvSym,prniSym, stoSym,brnSym,bzeSym);
-      while (sym.kind==eolSym){
-        getSym(); 
-      }
-      accept(beginSym,"BEGIN expected");
-      while (sym.kind==eolSym){
-        getSym();
-      }
-      
-      while (Statements.contains(sym.kind)){//
-        Statement();
-        if (sym.kind == endSym){
-          while (sym.kind==eolSym){
-            getSym();
-          }
-          accept(periodSym,". expected");
-          while (sym.kind==eolSym){
-            getSym();
-          }
-        }accept(endSym,"END expected");
-      }
-      
-    }
-
-    static void Statement() {
-    //Statement = [label] (OneWord | TwoWord | Branch ) EOL . 
-    IntSet TwoWords = new IntSet(ldaSym, ldcSym, dspSym);
-    IntSet OneWords = new IntSet(addSym, ceqSym, cneSym,inpiSym ,ldvSym,prniSym, stoSym);
-    IntSet Branchs = new IntSet(brnSym,bzeSym);
-    if (sym.kind==labelSym){
-      getSym();
-    }
-    if (OneWords.contains(sym.kind)){
-      OneWord();
-    } else if (TwoWords.contains(sym.kind)){
-      TwoWord();
-    } else if (Branchs.contains(sym.kind)){
-      Branch();
-    }else 
-    {abort("Statement wrong");
-     }                   //replace with switch
-    accept(eolSym,"EOL expected" );
-    }
   
-    static void OneWord(){
-    //OneWord = ( "ADD" | "CEQ" | "CNE" | "INPI" | "LDV" | "PRNI" | "STO" ) . 
-    switch (sym.kind){
-      case addSym:
-        getSym();
-      case ceqSym:
-        getSym();
-      case cneSym:
-        getSym();
-      case inpiSym:
-        getSym();
-      case ldvSym:
-        getSym();
-      case prniSym:
-        getSym();
-      case stoSym:
-        getSym();
-      default:
-        abort("Invalid vaule for oneword");
-      }
-    }
-
-    static void TwoWord(){
-    //TwoWord = ( "DSP" | "LDC" | "LDA" ) number .
-    switch (sym.kind){
-      case dspSym:
-        getSym();
-      case ldcSym:
-        getSym();
-      case ldaSym:
-        getSym();
-      
-      default:
-        abort("Invalid start to twowords");
-      }
-    accept(numSym,"number expected");
-    }
-    
-    
-
-    static void Branch(){
-    //Branch = ( "BRN" | "BZE" ) ( number | identifier ) . 
-    switch (sym.kind){
-      case brnSym:
-        getSym();
-      case bzeSym:
-        getSym();
-      default:
-        abort("Invalid start to branch");
-      }
-    
-    
-   switch (sym.kind){
-      case numSym:
-        getSym();
-      case identSym:
-        getSym();
-      default:
-        abort("Invalid start to branch");
-      }
-    }
   // +++++++++++++++++++++ Main driver function +++++++++++++++++++++++++++++++
 
   public static void main(String[] args) {
