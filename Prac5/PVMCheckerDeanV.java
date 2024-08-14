@@ -1,6 +1,7 @@
 // Do learn to insert your names and a brief description of
 // what the program is supposed to do!
-
+// Alisa, Dean, and Zaza: Malicious Hadadas. 
+//Lines changed: 76-79; 214-215; 236-368.
 // This is a skeleton program for developing a parser for checking PVMlike files
 // KL Bradshaw 2021
 
@@ -276,6 +277,7 @@ class PVMChecker {
     
       
     }
+  //Helper function for question 4, dealing with comments
     static void Comment(){
           accept(semicolonSym,"Semicolon expected");
           if (sym.kind==eolSym){
@@ -284,6 +286,7 @@ class PVMChecker {
             getSym();
           }
     }
+  //helper function for recursive descent
     static void Statement() {
     //Statement = [label] (OneWord | TwoWord | Branch ) EOL . 
     IntSet TwoWords = new IntSet(ldaSym, ldcSym, dspSym);
@@ -303,7 +306,7 @@ class PVMChecker {
      }                   //replace with switch
     accept(eolSym,"EOL expected" );
     }
-  
+  //OneWord helper function
     static void OneWord(){
     //OneWord = ( "ADD" | "CEQ" | "CNE" | "INPI" | "LDV" | "PRNI" | "STO" ) . 
     switch (sym.kind){
@@ -325,7 +328,7 @@ class PVMChecker {
         abort("Invalid vaule for oneword");
       }
     }
-
+//TwoWord helper function
     static void TwoWord(){
     //TwoWord = ( "DSP" | "LDC" | "LDA" ) number .
     switch (sym.kind){
@@ -343,7 +346,7 @@ class PVMChecker {
     }
     
     
-
+//Branch helper function
     static void Branch(){
     //Branch = ( "BRN" | "BZE" ) ( number | identifier ) . 
     switch (sym.kind){
