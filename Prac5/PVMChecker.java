@@ -1,7 +1,7 @@
 // Do learn to insert your names and a brief description of
 // what the program is supposed to do!
 //Alisha, Dean, and Zaza: The malicious Hadadas
-//changed lines 116-171 (Scanner).
+//changed lines 116-171 (Scanner); 218-335 (Parser).
 // This is a skeleton program for developing a parser for checking PVMlike files
 // KL Bradshaw 2021
 
