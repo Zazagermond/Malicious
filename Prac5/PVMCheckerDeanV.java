@@ -239,7 +239,7 @@ class PVMChecker {
       while (sym.kind==eolSym){
         getSym(); 
       }
-      }else{
+      }else if (sym.kind!=beginSym){
           Comment();
       }
       if (sym.kind==beginSym){
