@@ -1,0 +1,48 @@
+COMPILER Olympics $CN
+/* Parse a list of winners along with sport discipline and 
+   whether olympic (OR) or world (WR) record at the Olympics
+   KL Bradshaw, Rhodes University, 2024 */
+
+CHARACTERS
+  digit    	= "0123456789" .
+  lcase 	= 'a' .. 'z' .
+  ucase 	= 'A' .. 'Z' .
+  letters 	= lcase + ucase.
+  control  	= CHR(0) .. CHR(31) .
+  inEvent  	= ANY - control - '"' .
+  nameletters = lcase + "-'". 
+  
+TOKENS
+  event  = '"' inEvent { inEvent } '"' .
+  name =  ucase nameletters { nameletters } . 
+  country =  ucase { ucase } .
+  year   = digit digit digit digit .
+  sport = '[' letters { letters } ']' .
+
+IGNORE control
+
+PRODUCTIONS
+  Olympics 						  		 
+   = { 
+       OneEvent } 				  		
+	  EOF.
+  Winners = 							
+    "(" [ name {name} ","] 
+	  country 							
+	  {country					 		
+	  } 								
+	 ")"
+	  {"," 
+	    Winners} . 
+  Records =  
+      ("OR" | "WR" ) "/" year  . 
+ OneEvent   =  
+    sport 
+   ("Men" | "Women" | "Mixed") 
+   [ event ] 
+   Winners  
+   [ Records ] 
+   SYNC "." 
+   .  
+
+END Olympics.

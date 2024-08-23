@@ -1,0 +1,6 @@
+EBNF = { Production } EOF .
+Production = nonterminal "=" Expression "." .
+Expression = Term { "|" Term } .
+Term = [ Factor { Factor } ] .
+Factor   = nonterminal | terminal
+       | "[" Expression "]" | "(" Expression ")" | "{" Expression "}" .

@@ -1,0 +1,5 @@
+(* 03.BNF - A simple set of productions with some alternatives and parentheses *)
+
+Child     = FirstName Surname .
+FirstName = ( "Donald" "Father" ) | ( "Daffy" "Mother" ) .
+Surname   = "Duck" .

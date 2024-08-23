@@ -1,0 +1,6 @@
+(* 12.BNF - A bad set of wrong productions (why? *)
+
+Lecturer  = FirstName Surname .
+FirstName = [ "Dr" ] "Karen"
+Surname   = "Bradshaw" [ "PhD" } .
+

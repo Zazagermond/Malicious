@@ -1,0 +1,5 @@
+(* 06.BNF - A set of productions with some optional parts *)
+
+Lecturer  = FirstName Surname .
+FirstName = [ "Dr" | "Professor" ] "Karen" .
+Surname   = "Bradshaw" [ "PhD" | "MSc" "PhD" ] .

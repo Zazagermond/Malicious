@@ -1,0 +1,56 @@
+COMPILER EBNF $CN
+/* Parse a set of EBNF productions
+   P.D. Terry, modified by KL Bradshaw, 2024 */
+
+CHARACTERS
+  letter   = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" .
+  lowline  = "_" .
+  control  = CHR(0) .. CHR(31) .
+  digit    = "0123456789" .
+  noquote1 = ANY - "'" - control .
+  noquote2 = ANY - '"' - control .
+
+TOKENS
+  nonterminal = letter { letter | lowline | digit } .
+  terminal    = "'" noquote1 { noquote1 } "'" | '"' noquote2 { noquote2 } '"' .
+
+COMMENTS FROM "(*" TO "*)"  NESTED
+
+IGNORE control
+
+PRODUCTIONS
+   EBNF
+   =
+     { Production
+     }
+     EOF (.Table.ATable();.) .
+
+   Production
+   =
+     SYNC nonterminal
+     WEAK "="
+     Expression
+     SYNC "." .
+
+   Expression
+   =
+   Term
+   { WEAK "|" Term
+   } .
+
+   Term
+   =
+   [ Factor
+     { Factor
+     }
+   ] .
+
+   Factor
+   =
+       nonterminal
+     | terminal
+     | "[" Expression "]"
+     | "(" Expression ")"
+     | "{" Expression "}" .
+
+END EBNF.

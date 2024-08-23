@@ -1,0 +1,5 @@
+(* 04.BNF - A simple set of productions with some alternatives and parentheses *)
+
+Lecturer  = FirstName Surname .
+FirstName = ( "Dr" | "Professor" | "Ms" ) ( "K.L." | "Karen") .
+Surname   = "Bradshaw" .

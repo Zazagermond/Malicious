@@ -1,0 +1,63 @@
+import library.*;
+import java.util.*;
+
+COMPILER Bool $CN
+/* Boolean expression calculator
+   P.D. Terry, modified by KL Bradshaw 2024 */
+
+  static boolean[] mem = new boolean[26];
+
+IGNORECASE
+
+CHARACTERS
+  letter     = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" .
+TOKENS
+  variable   = letter .
+
+COMMENTS FROM "(*" TO "*)"  NESTED
+COMMENTS FROM "/*" TO "*/"  NESTED
+
+IGNORE CHR(0) .. CHR(31)
+
+PRODUCTIONS
+  Bool                               	(. 	int index = 0;
+						boolean value = false;
+						char var; boolean aval=false;													for (int i = 0; i < 26; i++) mem[i] = false; .)
+  = { ( Variable<out var>              	(. index = var - 'A'; .)
+         "=" Expression<out aval>			(. mem[index] = value; .)
+	| "print" Expression<out aval> 		(. IO.writeLine(value); .)
+	   )
+       ";"
+    } EOF .
+
+  Variable<out char var>
+  = variable                         (. var = token.val.charAt(0); .)
+  .
+
+  Expression<out boolean bolval>	(.boolean aval=false;.)
+  = Term<out bolval>
+    { Or Term<out aval>		(. bolval=bolval || aval;.)
+    } .
+
+  Term<out boolean bolval>	(.boolean aval=false;.)
+  = Factor<out bolval>
+    { [ And ] Factor<out aval>		(. bolval= bolval && aval;.)
+    } .
+
+  Factor<out boolean boval>
+ /* Note that ' means not as a postfix operator, e.g. b'  means "not b" */
+   =   "NOT" Factor<out boval> 		(.if  (boval==true){boval=false;}else{boval=true;}.)
+    | Primary<out boval>
+      { "'"
+      } .
+
+  Primary<out boolean Boloption>	(.boolean aval=false;  .)
+  =   True	(.Boloption=true;.)
+    | False	(.Boloption=false;.).
+   
+
+  True  = "TRUE" | "1" .
+  False = "FALSE" | "0" .
+  And   = "AND" | "&&" | "." .
+  Or    = "OR" | "||" | "+" .
+END Bool.

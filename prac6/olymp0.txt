@@ -1,0 +1,10 @@
+[Athletics] Men  "400m Hurdles" (Karsten Warholm, NORWAY ) WR/2021 .
+[Athletics] Men    "High jump"     (Gianmarco, ITALY), (Mutaz-Essa Barshim, QATAR) . 
+[Athletics] Mixed  "400m Relay"    (POLAND) OR/2021 .
+[Football] Women (CANADA) .
+[Swimming]  Women  "200m Breaststroke" (Tatjana Smith, SOUTH AFRICA) WR/2013 .
+[Athletics] Women  "Triple jump"  ( Yulimar   Rojas, VENEZUELA) WR/1995 .
+[Shooting] Mixed   "Team Air rifle 10m" (Qian Yang, CHINA), (Haoran Yang, CHINA) . 
+[Cycling] Women   "Team sprint"  (Bao Shanju, CHINA), (Zhong Tianshi  , CHINA) WR/2015 .
+[Cycling] Men 	"Individual sprint" (Harrie Lavreysen , NORWAY) .
+[Football] Men (BRAZIL) .

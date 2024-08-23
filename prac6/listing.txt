@@ -1,0 +1,62 @@
+  Warning: Expression is deletable
+  Warning: Term is deletable
+
+   1 COMPILER EBNF $CN
+   2 /* Parse a set of EBNF productions
+   3    P.D. Terry, modified by KL Bradshaw, 2024 */
+   4 
+   5 CHARACTERS
+   6   letter   = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" .
+   7   lowline  = "_" .
+   8   control  = CHR(0) .. CHR(31) .
+   9   digit    = "0123456789" .
+  10   noquote1 = ANY - "'" - control .
+  11   noquote2 = ANY - '"' - control .
+  12 
+  13 TOKENS
+  14   nonterminal = letter { letter | lowline | digit } .
+  15   terminal    = "'" noquote1 { noquote1 } "'" | '"' noquote2 { noquote2 } '"' .
+  16 
+  17 COMMENTS FROM "(*" TO "*)"  NESTED
+  18 
+  19 IGNORE control
+  20 
+  21 PRODUCTIONS
+  22    EBNF
+  23    =
+  24      { Production
+  25      }
+  26      EOF .
+  27 
+  28    Production
+  29    =
+  30      SYNC nonterminal
+  31      WEAK "="
+  32      Expression
+  33      SYNC "." .
+  34 
+  35    Expression
+  36    =
+  37    Term
+  38    { WEAK "|" Term
+  39    } .
+  40 
+  41    Term
+  42    =
+  43    [ Factor
+  44      { Factor
+  45      }
+  46    ] .
+  47 
+  48    Factor
+  49    =
+  50        nonterminal
+  51      | terminal
+  52      | "[" Expression "]"
+  53      | "(" Expression ")"
+  54      | "{" Expression "}" .
+  55 
+  56 END EBNF.
+
+0 errors detected
+2 warnings detected

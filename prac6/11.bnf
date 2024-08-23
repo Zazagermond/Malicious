@@ -1,0 +1,7 @@
+(* 11.BNF - A very simple set of wrong productions (why?) *)
+
+Tyrant  = Name Degrees .
+Name    = "Karen" "Bradshaw" .
+degrees = "MSc(Rhodes)" "PhD(Cambridge)" .
+Title   = "Professor" .
+

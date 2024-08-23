@@ -1,0 +1,5 @@
+(* 01.BNF - A very simple set of productions *)
+
+Tyrant  = Name Degrees .
+Name    = "Karen" "Bradshaw" .
+Degrees = "MSc(Rhodes)" "PhD(Cambridge)" .

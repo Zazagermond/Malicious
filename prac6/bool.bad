@@ -1,0 +1,8 @@
+A = True ;
+B = fALse ;
+X = true and false ornot0 ;
+C = a || B | X ;
+D = 1 . 1 .. 1 ;
+E = (C + D)'"' ;
+F = not (true & & not false) ;
+G = G || G;

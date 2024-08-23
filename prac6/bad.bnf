@@ -1,0 +1,5 @@
+(* 10.BNF - A vaguely incorrect familiar set of productions *)
+
+Expression =   Factor { ( "*" | "/" ) Factor
+              { ( "+" | "-" ) Factor { ( "*" | | "/" )  Factor } } .
+Factor     = "a" | "b" | "c" .

@@ -1,0 +1,132 @@
+  Parva
+  = "void" Ident "(" ")" Block .
+
+  Block
+  = "{" { Statement } "}" .
+
+  Statement
+  = { Label }
+    SYNC
+    (   Block | ConstDeclarations | VarDeclarations | Assignment
+      | IfStatement | WhileStatement | ReturnStatement | HaltStatement
+      | DoWhileStatement | ForStatement | GoToStatement
+      | ReadStatement | WriteStatement
+      | ";"
+    ) .
+
+  Label
+  = number ":" .
+
+  ConstDeclarations
+  = "const" OneConst { WEAK ","  OneConst } WEAK ";" .
+
+  OneConst
+  = Ident "=" Constant .
+
+  Constant
+  = IntConst | CharConst | "true" | "false" | "null" .
+
+  VarDeclarations
+  = Type OneVar { WEAK ","  OneVar } WEAK ";" .
+
+  OneVar
+  = Ident [ "=" Expression ] .
+
+  Assignment
+  = Designator "=" Expression WEAK ";" .
+
+  Designator
+  = Ident [ "[" Expression "]" ] .
+
+  IfStatement
+  = "if" "(" Condition ")" Statement [ "else" Statement ] .
+
+  WhileStatement
+  = "while" "(" Condition ")" Statement .
+
+  ReturnStatement
+  = "return" WEAK ";" .
+
+  HaltStatement
+  = "halt" WEAK ";" .
+
+  DoWhileStatement
+  = "do" Statement "while" "(" Condition ")" WEAK ";" .
+
+  ForStatement
+  = "for" "(" [ BasicType ] Ident "=" Expression WEAK ";"
+    Condition ";" Ident "=" Expression ")" Statement .
+
+  GoToStatement
+  = "goto" IntConst WEAK ";" .
+
+  ReadStatement
+  = "read" "(" ReadElement { WEAK ","  ReadElement } ")" WEAK ";" .
+
+  ReadElement
+  = StringConst | Designator .
+
+  WriteStatement
+  = "write" "(" WriteElement { WEAK ","  WriteElement } ")" WEAK ";" .
+
+  WriteElement
+  = StringConst | Expression .
+
+  Condition
+  = Expression .
+
+  Expression
+  = AndExp { "||" AndExp } .
+
+  AndExp
+  = EqlExp { "&&" EqlExp } .
+
+  EqlExp
+  = RelExp { EqlOp RelExp } .
+
+  RelExp
+  = AddExp [ RelOp AddExp ] .
+
+  AddExp
+  = MulExp { AddOp MulExp } .
+
+  MulExp
+  = Factor { MulOp Factor } .
+
+  Factor
+  = Primary | ( "+" | "-" | "!" ) Factor .
+
+  Primary
+  =   Designator | Constant
+    | "new" BasicType "[" Expression "]"
+    | "(" Expression ")" .
+
+  Type
+  = BasicType [ "[]" ] .
+
+  BasicType
+  = "int" | "bool" .
+
+  AddOp
+  = "+" | "-" .
+
+  MulOp
+  = "*" | "/" | "%" .
+
+  EqlOp
+  = "==" | "!=" .
+
+  RelOp
+  = "<" | "<=" | ">" | ">=" .
+
+  Ident
+  = identifier .
+
+  IntConst
+  = number .
+
+  StringConst
+  = stringLit .
+
+  CharConst
+  = charLit .

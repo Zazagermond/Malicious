@@ -1,0 +1,7 @@
+(* 09.BNF - A familiar set of productions *)
+
+Expression = Term { AddOp Term } .
+Term       = Factor { MulOp Factor } .
+Factor     = "a" | "b" | "c" .
+MulOp      = "*" | "/" .
+AddOp      = "+" | "-" .
