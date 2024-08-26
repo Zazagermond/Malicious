@@ -47,23 +47,28 @@ PRODUCTIONS
     { [ And ] Factor <out loktv>  (.termvar=termvar&loktv;.)
     } .
 
-  Factor <out boolean facvar> 				(. boolean nought=false; .)
+  Factor <out boolean facvar> 				(. boolean nought;boolean local;.)
  /* Note that ' means not as a postfix operator, e.g. b'  means "not b" */
-   =   "NOT" Factor <out facvar>		
-    | Primary <out facvar>				(. facvar=facvar&&nought; .)
-      { "'"								(.  nought=true;
-											facvar=facvar&&nought; .)
+   =   "NOT" Factor <out nought>		 (.facvar=!nought;.)
+    | Primary <out nought>{"'"}			(. local=nought;
+										while(token.val.endsWith("'")){
+											local=!local;
+											token.val=token.val.substring(0, token.val.length()-1);
+											};
+											facvar=local;
+											
+											.)
 												
 												
-      } .
+       .
 
-  Primary <out boolean facvar>			(.char isChar=token.val.charAt(0); .)
+  Primary <out boolean pfacvar>			(.char isChar=token.val.charAt(0); .)
 	=   True									(. if (isChar=='t'|isChar=='T')
-													facvar=true; .)						
+													pfacvar=true; .)						
     | False										(.	if (isChar=='F'|isChar=='f')
-													facvar=false; .) 									
-    | variable								  	(.facvar=mem[(int)(Character.toUpperCase(isChar)-'A')]; .)			
-    | "(" Expression <out facvar> ")" .
+													pfacvar=false; .) 									
+    | variable								  	(.pfacvar=mem[(int)(Character.toUpperCase(isChar)-'A')]; .)			
+    | "(" Expression <out pfacvar> ")" .
 
   True="TRUE" | "1" .
   False="FALSE" | "0" 	.
