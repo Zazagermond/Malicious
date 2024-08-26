@@ -21,11 +21,11 @@ IGNORE CHR(0) .. CHR(31)
 
 PRODUCTIONS
   Bool                               	(. 	int index = 0;
-						boolean value = false;
-						char var; boolean aval=false;													for (int i = 0; i < 26; i++) mem[i] = false; .)
+						boolean aval = false;
+						char var; 												for (int i = 0; i < 26; i++) mem[i] = false; .)
   = { ( Variable<out var>              	(. index = var - 'A'; .)
-         "=" Expression<out aval>			(. mem[index] = value; .)
-	| "print" Expression<out aval> 		(. IO.writeLine(value); .)
+         "=" Expression<out aval>			(. mem[index] = aval; .)
+	| "print" Expression<out aval> 		(. IO.writeLine(aval); .)
 	   )
        ";"
     } EOF .
@@ -34,27 +34,28 @@ PRODUCTIONS
   = variable                         (. var = token.val.charAt(0); .)
   .
 
-  Expression<out boolean bolval>	(.boolean aval=false;.)
+  Expression<out boolean bolval>	(.bolval=false;.)
   = Term<out bolval>
-    { Or Term<out aval>		(. bolval=bolval || aval;.)
+    { Or Term<out boolean aval>		(. bolval=bolval || aval;.)
     } .
 
-  Term<out boolean bolval>	(.boolean aval=false;.)
+  Term<out boolean bolval>	(.bolval=false;.)
   = Factor<out bolval>
-    { [ And ] Factor<out aval>		(. bolval= bolval && aval;.)
+    { [ And ] Factor<out boolean aval>		(. bolval= bolval && aval;.)
     } .
 
-  Factor<out boolean boval>
+  Factor<out boolean boval>(.boval=false;.)
  /* Note that ' means not as a postfix operator, e.g. b'  means "not b" */
    =   "NOT" Factor<out boval> 		(.if  (boval==true){boval=false;}else{boval=true;}.)
     | Primary<out boval>
       { "'"
       } .
 
-  Primary<out boolean Boloption>	(.boolean aval=false;  .)
+  Primary<out boolean Boloption>	(. Boloption=false;  .)
   =   True	(.Boloption=true;.)
-    | False	(.Boloption=false;.).
-   
+    | False	(.Boloption=false;.)
+   | variable								  		
+    | "(" Expression <out Boloption> ")" .
 
   True  = "TRUE" | "1" .
   False = "FALSE" | "0" .
