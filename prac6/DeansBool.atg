@@ -35,8 +35,8 @@ PRODUCTIONS
   = variable                         		(. var = token.val.charAt(0); .)
   .
 
-  Expression<out boolean calvar> 			(. boolean expval; .)
-  = Term <out calvar>					(. if (calvar==true) return calvar;
+  Expression<out boolean calvar> 			(. boolean expval=false; .)
+  = Term <out calvar>						(. if (calvar==true) return calvar;
 											else if (expval==true) calvar=true;
 											else expval=false; .)
     { Or Term <out expval>
@@ -44,24 +44,29 @@ PRODUCTIONS
 
   Term <out boolean termvar> (. boolean loktv; .)
   = Factor <out termvar>	
-    { [ And ] Factor <out loktv>  (.termvar=termvar&&loktv;.)
+    { [ And ] Factor <out loktv>  (.termvar=termvar&loktv;.)
     } .
 
-  Factor <out boolean facvar> (. boolean nought=false; .)
+  Factor <out boolean facvar> 				(. boolean nought=false; .)
  /* Note that ' means not as a postfix operator, e.g. b'  means "not b" */
    =   "NOT" Factor <out facvar>		
-    | Primary <out facvar>				(. facvar=((boolean)facvar)&&nought; .)
-      { "'"
+    | Primary <out facvar>				(. facvar=facvar&&nought; .)
+      { "'"								(.  nought=true;
+											facvar=facvar&&nought; .)
+												
+												
       } .
 
-  Primary <out char facvar>
-  =   True 	<out facvar>											
-    | False	<out facvar>											
-    | variable											(. facvar = token.val.charAt(0); .)
+  Primary <out boolean facvar>			(.char isChar=token.val.charAt(0); .)
+	=   True									(. if (isChar=='t'|isChar=='T')
+													facvar=true; .)						
+    | False										(.	if (isChar=='F'|isChar=='f')
+													facvar=false; .) 									
+    | variable								  	(.facvar=mem[(int)(Character.toUpperCase(isChar)-'A')]; .)			
     | "(" Expression <out facvar> ")" .
 
-  True<out char tval>  = "TRUE" | "1" 												(. tval= (char) 1; .).
-  False<out char fval> = "FALSE" | "0" 											(. fval= (char)0; .).
+  True="TRUE" | "1" .
+  False="FALSE" | "0" 	.
   And   = "AND" | "&&" | "." .
   Or    = "OR" | "||" | "+" .
 END Bool.
