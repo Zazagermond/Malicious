@@ -1,7 +1,7 @@
 COMPILER EBNF $CN
 /* Parse a set of EBNF productions
    P.D. Terry, modified by KL Bradshaw, 2024 */
-
+  static double[] mem = new double[100];
 CHARACTERS
   letter   = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" .
   lowline  = "_" .
@@ -19,15 +19,17 @@ COMMENTS FROM "(*" TO "*)"  NESTED
 IGNORE control
 
 PRODUCTIONS
-   EBNF
+   EBNF               (.Table SymbolTable = new Table;
+                        int lineref=0;  .)
    =
-     { Production
+     { Production     (lineref+=1;)
      }
-     EOF (.Table.ATable();.) .
+     EOF  .
 
    Production
    =
-     SYNC nonterminal
+     SYNC nonterminal (.
+                        SymbolTable.addRef(nonterminal, decalred, lineref);.)
      WEAK "="
      Expression
      SYNC "." .
@@ -47,7 +49,7 @@ PRODUCTIONS
 
    Factor
    =
-       nonterminal
+       nonterminal //adds new line
      | terminal
      | "[" Expression "]"
      | "(" Expression ")"
