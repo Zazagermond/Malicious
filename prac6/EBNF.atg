@@ -1,7 +1,12 @@
+
+import java.util.*;
+import library.*;
 COMPILER EBNF $CN
 /* Parse a set of EBNF productions
    P.D. Terry, modified by KL Bradshaw, 2024 */
   static double[] mem = new double[100];
+  static Table SymbolTable = new Table();
+  static int lineref=0;
 CHARACTERS
   letter   = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" .
   lowline  = "_" .
@@ -19,22 +24,22 @@ COMMENTS FROM "(*" TO "*)"  NESTED
 IGNORE control
 
 PRODUCTIONS
-   EBNF               (.Table SymbolTable = new Table;
-                        int lineref=0;  .)
+   EBNF              
    =
-     { Production     (lineref+=1;)
-     }
+     { Production     (.lineref=0;.)
+     }          (.SymbolTable.printTable();.)
      EOF  .
 
    Production
    =
-     SYNC nonterminal (.
-                        SymbolTable.addRef(nonterminal, decalred, lineref);.)
+     SYNC nonterminal (.boolean decalred= SymbolTable.ccontains(token.val);
+                        SymbolTable.addRef(token.val, decalred, lineref);
+                        lineref+=1;.)
      WEAK "="
-     Expression
+     Expression 
      SYNC "." .
 
-   Expression
+   Expression 
    =
    Term
    { WEAK "|" Term
@@ -43,13 +48,15 @@ PRODUCTIONS
    Term
    =
    [ Factor
-     { Factor
+     { Factor  (. .)
      }
    ] .
 
    Factor
    =
-       nonterminal //adds new line
+       nonterminal (.   boolean decalred = SymbolTable.ccontains(token.val);
+                        SymbolTable.addRef(token.val, decalred, lineref);
+                        lineref+=1;.)
      | terminal
      | "[" Expression "]"
      | "(" Expression ")"

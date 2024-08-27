@@ -18,28 +18,48 @@ import library.*;
   } // Entry
 
   class Table {
-    ArrayList<Entry> Tableentres = new ArrayList<Entry>();
+    static ArrayList<Entry> Tableentres = new ArrayList<Entry>();
     public static void clearTable() {
     // Clears cross-reference table
-    Tableentres.clear();
+    Tableentres = new ArrayList<Entry>();
     } // clearTable
 
     public static void addRef(String name, boolean declared, int lineRef) {
     // What do you suppose is the purpose of the "declared" parameter?
     Entry test=getEntry(name);
     if (test!=null) {
-      Entry test=getEntry(name);
-      (test.refs).add(lineRef); //does this change in tableenteis
+       
+      (getEntry(name).refs).add(lineRef); //does this change in tableenteis
     }else{
-    Tableentres.add(Entry(name)); //not sure how it handes lineref
+    //not sure how it handes lineref
+    Entry check= new Entry(name);
+    (check.refs).add(-lineRef);
+     Tableentres.add(check);
     }
     } // addRef
 
     public static void printTable() {
     // Prints out all references in the table (eliminate duplicates line numbers)
-
+    IntSet reflist = new IntSet();
+    StringBuilder output = new StringBuilder();
+    for (Entry entry1:Tableentres){
+        output.append(entry1.name+ " ");
+         reflist = new IntSet();
+        for (int refs1:entry1.refs){
+         if (refs1>=0){ reflist.incl(refs1);}
+         
+         
+        }
+        output.append(reflist.toString());
+        for (int refs2:entry1.refs){
+         if (refs2<0){output.append(refs2) ;}
+         
+         
+        }
+    }
+    System.out.print(output.toString());
     } // printTable
-    public static void getEntry( String aname){
+    public static Entry getEntry( String aname){
       for (Entry aent: Tableentres){
         if ((aent.name).equals(aname))
         { return aent;}
@@ -47,7 +67,7 @@ import library.*;
       return null;
     }
 
-    public static void contains (String name){
+    public static boolean ccontains (String aname){
       for (Entry aent: Tableentres){
         if ((aent.name).equals(aname))
         { return true;}
