@@ -40,17 +40,15 @@ PRODUCTIONS
 												.)
   .
 
-  Expression<out boolean calvar> 			(. boolean expval=false; .)
+  Expression<out boolean calvar> 			
   = Term <out calvar>						
-    { Or Term <out expval>					(. if (calvar==true) return calvar;
-											else if (expval==true|calvar==true) calvar=true;
-											else calvar=false; .)
+    { Or Term <out boolean expval>					(. calvar=expval||calvar;  .)
     } .
 
   
-  Term <out boolean termvar> (. boolean loktv; .)
+  Term <out boolean termvar> (. termvar=false; .)
   = Factor <out termvar>	
-    { [ And ] Factor <out loktv>  (.termvar=termvar&loktv;.)
+    { [ And ] Factor <out boolean loktv>  (.termvar=termvar&&loktv;.)
     } .
 
 
@@ -69,7 +67,7 @@ PRODUCTIONS
     | variable							  	 	(.if (declared[(int)(token.val.charAt(0)-'A')]) ;
 												else{
 												IO.writeLine("Variable undeclared");
-												token.val="a";}.)
+												System.exit(0);}.)
     | "(" Expression <out pfacvar> ")" .
 
   True="TRUE" | "1" .
