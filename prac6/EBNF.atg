@@ -6,7 +6,7 @@ COMPILER EBNF $CN
    P.D. Terry, modified by KL Bradshaw, 2024 */
   static double[] mem = new double[100];
   static Table SymbolTable = new Table();
-  static int lineref=0;
+  static int lineref=1;
 CHARACTERS
   letter   = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" .
   lowline  = "_" .
@@ -26,15 +26,15 @@ IGNORE control
 PRODUCTIONS
    EBNF              
    =
-     { Production     (.lineref=0;.)
+     { Production     (.lineref=1;.)
      }          (.SymbolTable.printTable();.)
      EOF  .
 
    Production
    =
-     SYNC nonterminal (.boolean decalred= SymbolTable.ccontains(token.val);
-                        SymbolTable.addRef(token.val, decalred, lineref);
-                        lineref+=1;.)
+     SYNC nonterminal (.
+                        SymbolTable.addRef(token.val, SymbolTable.ccontains(token.val), -(token.line));
+                        .)
      WEAK "="
      Expression 
      SYNC "." .
@@ -54,9 +54,9 @@ PRODUCTIONS
 
    Factor
    =
-       nonterminal (.   boolean decalred = SymbolTable.ccontains(token.val);
-                        SymbolTable.addRef(token.val, decalred, lineref);
-                        lineref+=1;.)
+       nonterminal (.   
+                        SymbolTable.addRef(token.val, SymbolTable.ccontains(token.val), token.line);
+                        .)
      | terminal
      | "[" Expression "]"
      | "(" Expression ")"

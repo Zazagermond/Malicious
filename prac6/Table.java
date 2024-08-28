@@ -27,35 +27,39 @@ import library.*;
     public static void addRef(String name, boolean declared, int lineRef) {
     // What do you suppose is the purpose of the "declared" parameter?
     Entry test=getEntry(name);
-    if (test!=null) {
+    if (declared) {
        
       (getEntry(name).refs).add(lineRef); //does this change in tableenteis
     }else{
     //not sure how it handes lineref
     Entry check= new Entry(name);
-    (check.refs).add(-lineRef);
+    (check.refs).add(lineRef);
      Tableentres.add(check);
     }
     } // addRef
 
     public static void printTable() {
     // Prints out all references in the table (eliminate duplicates line numbers)
-    IntSet reflist = new IntSet();
+    ArrayList<Integer> reflist = new ArrayList<Integer>();
     StringBuilder output = new StringBuilder();
+    int aref;
     for (Entry entry1:Tableentres){
         output.append(entry1.name+ " ");
-         reflist = new IntSet();
+         reflist = new ArrayList<Integer>();
         for (int refs1:entry1.refs){
-         if (refs1>=0){ reflist.incl(refs1);}
-         
-         
+         if (refs1>=0){ 
+          if ((reflist).contains(refs1)==false){
+              reflist.add(refs1);
+              output.append(refs1+" ");
+          }
+         } 
         }
-        output.append(reflist.toString());
+        
         for (int refs2:entry1.refs){
-         if (refs2<0){output.append(refs2) ;}
-         
-         
+         if (refs2<0){output.append(refs2) ;
+         }
         }
+        output.append("\n") ;
     }
     System.out.print(output.toString());
     } // printTable
