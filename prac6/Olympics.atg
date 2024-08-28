@@ -1,3 +1,4 @@
+import library.*;
 COMPILER Olympics $CN
 /* Parse a list of winners along with sport discipline and 
    whether olympic (OR) or world (WR) record at the Olympics
@@ -25,11 +26,11 @@ PRODUCTIONS
   Olympics 						  		 
    = { 
        OneEvent } 				  		
-	  EOF.
+	  EOF (. Table.printTable(); .) .
   Winners = 							
     "(" [ name {name} ","] 
-	  country 							
-	  {country					 		
+	  country 			(. Table.incMedal(token.val);.)	
+	  {country				(. Table.incMedal(token.val);.)	 		
 	  } 								
 	 ")"
 	  {"," 
@@ -40,9 +41,10 @@ PRODUCTIONS
     sport 
    ("Men" | "Women" | "Mixed") 
    [ event ] 
-   Winners  
+   Winners 
    [ Records ] 
    SYNC "." 
    .  
 
 END Olympics.
+
