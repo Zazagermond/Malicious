@@ -6,7 +6,10 @@ COMPILER Parva $NC
    P.D. Terry, Rhodes University; Modified by KL Bradshaw, 2024
    Java operator precedences with short circuit evaluation
    Includes character type
-   No functions and no optimization */
+   No functions and no optimization
+   Added support for square() and squareroot() functions: 407-420.
+
+*/
 
   public static boolean
     debug    = false;
@@ -402,17 +405,17 @@ PRODUCTIONS
                                                 type = Types.boolType;
                                                 CodeGen.negateBoolean(); .)
 	| "sqr" "(" Expression<out type> ")"		(. if (!isArith(type)) {
-                                                  SemError("arithmetic operand needed for sqr");
+                                                  SemError("arithmetic operand needed for sqr() function");
                                                   type = Types.noType;
                                                 } else {
-                                                  CodeGen.sqr();  // Add support for square operation
+                                                  CodeGen.sqr();  
                                                   type = Types.intType;
                                                 } .)
 	 | "sqrt" "(" Expression<out type> ")"  (. if (!isArith(type)) {
-                                                  SemError("arithmetic operand needed for sqrt");
+                                                  SemError("arithmetic operand needed for sqrt() function");
                                                   type = Types.noType;
                                                 } else {
-                                                  CodeGen.sqrt();  // Add support for square root operation
+                                                  CodeGen.sqrt();  
                                                   type = Types.intType;
                                                 } .)
   .
