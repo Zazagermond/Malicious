@@ -1,5 +1,6 @@
 // Code Generation for compilers and assemblers targetting the PVM (Java version)
 // P.D. Terry, Rhodes University; modified KL Bradshaw, 2021
+//Code changed to support functionality for question 5:83-89
 
 package Parva;
 
@@ -78,6 +79,8 @@ import java.util.*;
         PVM.mem[codeTop] = word; codeTop++;
       }
     } // Codegen.emit
+
+
     public static void sqr(){
         emit(PVM.dup);
         emit(PVM.mul);
@@ -85,6 +88,7 @@ import java.util.*;
     public static void sqrt(){
         emit(PVM.sqrt);
     }
+//Code to support Square() and Squareroot() functions
     public static void negateInteger() {
     // Generates code to negate integer value on top of evaluation stack
       emit(PVM.neg);
