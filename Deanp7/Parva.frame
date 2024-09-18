@@ -31,6 +31,7 @@ Coco/R itself) does not fall under the GNU General Public License.
    P.D. Terry, Rhodes University; modified KL Bradshaw, 2021 */
 
 //  ----------------------- you may need to change the "import" clauses:
+// Changes to support pragmas as in question 1: 57-62; 97-98.
 
 import java.io.*;
 import java.util.*;
