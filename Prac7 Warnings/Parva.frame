@@ -31,7 +31,7 @@ Coco/R itself) does not fall under the GNU General Public License.
    P.D. Terry, Rhodes University; modified KL Bradshaw, 2021 */
 
 //  ----------------------- you may need to change the "import" clauses:
-//Malicious Hadedas: Alisha; Dean; and, Zaza.
+//Malicious Hadedas: Alisha; Dean; and, Zaza. Lines changed: 57-64; 100-102.
 
 import java.io.*;
 import java.util.*;
