@@ -1,7 +1,8 @@
 // Definition of simple stack machine and simple emulator for Parva level 1 (Java version)
 // Uses auxiliary methods push, pop and next
 // P.D. Terry, Rhodes University; modified KL Bradshaw, 2021
-// Edited code for question 5: 97-98; 565 - 575; 746.
+// Malicious Hadedas : Alisha; Dean; and, Zaza.
+//Edited code for question 5: 97-98; 565 - 575; 746.
 package Parva;
 
 import java.util.*;
