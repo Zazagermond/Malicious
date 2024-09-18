@@ -8,7 +8,8 @@ COMPILER Parva $NC
    Includes character type
    No functions and no optimization 
 Malicious Hadedas: Alisha, Dean; and, Zaza 
-Changes made: lines 16-18; 107-112; 148; 155; 415-430; */
+Changes made: lines 16-19; 107-113; 145 - 146; 151; 154-162; 167; 280; 290; 314; 428-443.  
+ */
 
   public static boolean
     debug    = false,
@@ -141,6 +142,8 @@ PRODUCTIONS
             | AssignmentStatement
             | IfStatement<frame>
             | WhileStatement<frame>
+	    | RepeatUntilStatement<frame>     // Added repeat-until statement
+            | DoWhileStatement<frame>         // Added do-while statement
             | HaltStatement
             | ReturnStatement
             | ReadStatement
@@ -148,6 +151,15 @@ PRODUCTIONS
             | ";" (.if (warned){Warning(" Warning Empty Statement");}.) //Question 2: Support for warnings and error recovery
           )
   .
+RepeatUntilStatement<StackFrame frame> //Added repeat-until statement
+    = "repeat" Statement<frame> "until" "(" Expression<frame> ")"
+      WEAK ";"
+    .
+  
+  DoWhileStatement<StackFrame frame> // Added do-while statement
+    = "do" "{" Statement<frame> "}" "while" "(" Expression<frame> ")"
+      WEAK ";"
+    .
 
   Block<StackFrame frame>
   =                                          (. Table.openScope(); .)
@@ -265,7 +277,7 @@ PRODUCTIONS
 
  
   HaltStatement
-  =  "halt"                                  (. CodeGen.leaveProgram(); .)
+  =  "halt" ( "(" STRING_LITERAL ")" )                                       (. CodeGen.leaveProgram(); .)
      WEAK ";"
   .
 
@@ -275,7 +287,7 @@ PRODUCTIONS
   .
 
   ReadStatement
-  = "read" "(" ReadList")"
+  = "read" "Line" "(" ReadList")"
     WEAK ";"
   .
 
@@ -299,8 +311,9 @@ PRODUCTIONS
   .
 
   WriteStatement
-  = "write" "(" WriteList ")"
+  = "write" "(" WriteList ")"                 (. CodeGen.writeLine(); .)
     WEAK ";"
+  
   .
 
   WriteList
