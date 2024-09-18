@@ -107,7 +107,7 @@ PRAGMAS
   Symboltable ="$ST".                        (.if (debug){Table.printTable(OutFile.StdOut);}.)
   StackDump="$SD".                          (.if (debug){CodeGen.stack();}.)
   HeapDump= "$HD".                            (.if (debug){ CodeGen.heap();}.)
-  WarningsOff ="$W-".                        (.warned=false;.)
+  WarningsOff ="$W-".                        (.warned=false;.) //added by zaza
 
 
 COMMENTS FROM "//" TO lf
