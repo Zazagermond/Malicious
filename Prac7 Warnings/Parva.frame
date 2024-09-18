@@ -57,7 +57,7 @@ import library.*;
 		else if (args[i].toLowerCase().equals("-st")) Table.printTable(OutFile.StdOut);
 		else if (args[i].toLowerCase().equals("-hd")) CodeGen.heap();
 		else if (args[i].toLowerCase().equals("-sd")) CodeGen.stack();
-		else if (args[i].toLowerCase().equals("-c")&&args[i+1].toLowerCase().equals("-l")){ Parser.cod  = true; mergeErrors = true;}
+		else if (args[i].toLowerCase().equals("-c")&&args[i+1].toLowerCase().equals("-l")){ Parser.cod  = true; mergeErrors = true; i++;}
         else if (args[i].toLowerCase().equals("-d")) Parser.debug = true; 
         else if (args[i].toLowerCase().equals("-c")) Parser.cod = true;
         else if (args[i].toLowerCase().equals("-w")) Parser.warned = false; 
