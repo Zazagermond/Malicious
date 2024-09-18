@@ -6,12 +6,14 @@ COMPILER Parva $NC
    P.D. Terry, Rhodes University; Modified by KL Bradshaw, 2024
    Java operator precedences with short circuit evaluation
    Includes character type
-   No functions and no optimization */
+   No functions and no optimization 
+Malicious Hadedas: Alisha, Dean; and, Zaza 
+Changes made: lines 16-18; 107-112; 148; 155; 415-430; */
 
   public static boolean
     debug    = false,
     cod      =false,
-    warned   =true;   //added zaza
+    warned   =true;   
     
   public static final OutFile StdOut = new OutFile();
 
@@ -107,7 +109,7 @@ PRAGMAS
   Symboltable ="$ST".                        (.if (debug){Table.printTable(OutFile.StdOut);}.)
   StackDump="$SD".                          (.if (debug){CodeGen.stack();}.)
   HeapDump= "$HD".                            (.if (debug){ CodeGen.heap();}.)
-  WarningsOff ="$W-".                        (.warned=false;.) //added by zaza
+  WarningsOff ="$W-".                        (.warned=false;.) 
 
 
 COMMENTS FROM "//" TO lf
@@ -143,14 +145,14 @@ PRODUCTIONS
             | ReturnStatement
             | ReadStatement
             | WriteStatement
-            | ";" (.if (warned){Warning(" Warning Empty Statement");}.) //added zaza
+            | ";" (.if (warned){Warning(" Warning Empty Statement");}.) //Question 2: Support for warnings and error recovery
           )
   .
 
   Block<StackFrame frame>
   =                                          (. Table.openScope(); .)
      "{" (Statement<frame>{ Statement<frame> }
-     |                                       (.if(warned){Warning(" Warning Empty Block");}.) //added zaza
+     |                                       (.if(warned){Warning(" Warning Empty Block");}.) //Question 2: Support for warnings and error recovery
      )WEAK "}"                                (. Table.closeScope(); .)
   .
 
@@ -410,6 +412,21 @@ PRODUCTIONS
                                                   SemError("Boolean operand needed");
                                                 type = Types.boolType;
                                                 CodeGen.negateBoolean(); .)
+/* Question 5: Added support for square root (i.e. sqrt()) and square (i.e. sqr()) functions */
+	| "sqr" "(" Expression<out type> ")"		(. if (!isArith(type)) {
+                                                  SemError("arithmetic operand needed for sqr() function");
+                                                  type = Types.noType;
+                                                } else {
+                                                  CodeGen.sqr();  
+                                                  type = Types.intType;
+                                                } .)
+	 | "sqrt" "(" Expression<out type> ")"  (. if (!isArith(type)) {
+                                                  SemError("arithmetic operand needed for sqrt() function");
+                                                  type = Types.noType;
+                                                } else {
+                                                  CodeGen.sqrt();  
+                                                  type = Types.intType;
+                                                } .)
   .
 
   Primary<out int type>                      (. type = Types.noType;
