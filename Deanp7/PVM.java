@@ -1,7 +1,7 @@
 // Definition of simple stack machine and simple emulator for Parva level 1 (Java version)
 // Uses auxiliary methods push, pop and next
 // P.D. Terry, Rhodes University; modified KL Bradshaw, 2021
-
+// Edited code for question 5: 97-98; 565 - 575; 746.
 package Parva;
 
 import java.util.*;
@@ -561,14 +561,18 @@ import library.*;
             adr = pop();
             if (inBounds(adr)) mem[adr]--;
             break;
+
+            // added functionality for square root and square functions
+            //dup duplicates the tos, thereafter a mul opcode is used to effectively square the value or variable
           case PVM.dup:
             tos=pop();
             push(tos);
             push(tos);
             break;
             case PVM.sqrt:
-              tos=Math.sqrt(pop());
+              tos=(int)(Math.sqrt((double)pop()));
               break;
+            //end of code added by Dean
           case PVM.stack:         // stack dump (debugging)
             stackDump(initSP, results, pcNow);
             break;
@@ -756,6 +760,7 @@ import library.*;
       mnemonics[PVM.sto]      = "STO";
       mnemonics[PVM.stoc]     = "STOC";
       mnemonics[PVM.sub]      = "SUB";
+      mnemonics[PVM.sqrt]     =  "SQRT";
     } // PVM.init
 
   } // end PVM
