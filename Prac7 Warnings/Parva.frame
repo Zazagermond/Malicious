@@ -31,6 +31,7 @@ Coco/R itself) does not fall under the GNU General Public License.
    P.D. Terry, Rhodes University; modified KL Bradshaw, 2021 */
 
 //  ----------------------- you may need to change the "import" clauses:
+//Malicious Hadedas: Alisha; Dean; and, Zaza.
 
 import java.io.*;
 import java.util.*;
@@ -52,10 +53,15 @@ import library.*;
       System.out.println("Parva compiler 1.2014");
 
       for (int i = 0; i < args.length; i++) {
-        if (args[i].toLowerCase().equals("-l")) mergeErrors = true;
+
+		else if (args[i].toLowerCase().equals("-st")) Table.printTable(OutFile.StdOut);
+		else if (args[i].toLowerCase().equals("-hd")) CodeGen.heap();
+		else if (args[i].toLowerCase().equals("-sd")) CodeGen.stack();
+		else if (args[i].toLowerCase().equals("-c")&&args[i+1].toLowerCase().equals("-l")){ Parser.cod  = true; mergeErrors = true;}
         else if (args[i].toLowerCase().equals("-d")) Parser.debug = true; 
         else if (args[i].toLowerCase().equals("-c")) Parser.cod = true;
-        else if (args[i].toLowerCase().equals("-w")) Parser.warned = false; //added by zaza
+        else if (args[i].toLowerCase().equals("-w")) Parser.warned = false; 
+      //end of added functionality for pragmas done by Malicious Hadeda's
         
           else inputName = args[i];
       }
