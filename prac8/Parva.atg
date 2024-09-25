@@ -1,6 +1,6 @@
 import java.util.*;
 import library.*;
-
+//Zaza all added code by Zaza
 COMPILER Parva $NC
 /* Parva level 1 grammar  - Coco/R for Java
    P.D. Terry, Rhodes University; Modified by KL Bradshaw, 2024
@@ -13,8 +13,8 @@ COMPILER Parva $NC
     optimize = false,
     listCode = false,
     warnings = true,
-    breaking=false,
-    continuing=false;
+    breaking=false,			//Zaza
+    continuing=false;			//Zaza
 
   static final boolean
     known = true;
@@ -146,10 +146,10 @@ PRODUCTIONS
             | WriteStatement
 			| DoWhileStatement<frame>
 			| RepeatStatement<frame>
-           | Breakstatement                         
-    |ContinueStatement 
+           | Breakstatement                         //Zaza
+    |ContinueStatement 					//Zaza
 
-            | ";"					(. if (warnings) {Warning("empty statement"); if (breaking){Warning("Break outside loop");}if (continuing){Warning("continue outside loop");} }.)
+            | ";"					(. if (warnings) {Warning("empty statement"); if (breaking){Warning("Break outside loop");}if (continuing){Warning("continue outside loop");} }.)//Zaza
           )
   .
 
@@ -220,8 +220,8 @@ PRODUCTIONS
 
   AssignmentStatement
                                              (. int expType;
-                                                DesType des; Label exitBreak = new Label(!known); .)
-  =                                           (.if(breaking){CodeGen.branch(exitBreak);}.)
+                                                DesType des; Label exitBreak = new Label(!known); .)//Zaza
+  =                                           (.if(breaking){CodeGen.branch(exitBreak);}.)	//Zaza
   
    Designator<out des>                      (. if (des.entry.kind != Kinds.Var)
                                                   SemError("cannot assign to " + Kinds.kindNames[des.entry.kind]); .)
@@ -229,7 +229,7 @@ PRODUCTIONS
     Expression<out expType>                  (. if (!assignable(des.type, expType))
                                                   SemError("incompatible types in assignment");
                                                 CodeGen.assign(des.type); .)
-    WEAK ";"                                  (.exitBreak.here();.)
+    WEAK ";"                                  (.exitBreak.here();.)//Zaza
   .
 
   Designator<out DesType des>                (. String name;
@@ -254,48 +254,48 @@ PRODUCTIONS
   .
 
   IfStatement<StackFrame frame>
-                                             (. Label falseLabel = new Label(!known);  Label trueLabel = new Label(!known); Label exitBreak = new Label(!known);.)
+                                             (. Label falseLabel = new Label(!known);  Label trueLabel = new Label(!known); Label exitBreak = new Label(!known);.)//Zaza
   =  "if" "(" Condition ")"                  (. CodeGen.branchFalse(falseLabel); .)
                                                 
        Statement<frame>                      
-                                              (. CodeGen.branchFalse(trueLabel); falseLabel.here(); if (breaking){CodeGen.branch(exitBreak);}.) //double check
+                                              (. CodeGen.branchFalse(trueLabel); falseLabel.here(); if (breaking){CodeGen.branch(exitBreak);}.) //double check//Zaza
       
-      ( ("else" Statement<frame>                (.if (breaking){CodeGen.branch(exitBreak);} if (continuing){CodeGen.branch(exitBreak);}.)
+      ( ("else" Statement<frame>                (.if (breaking){CodeGen.branch(exitBreak);} if (continuing){CodeGen.branch(exitBreak);}.)//Zaza
       )                      
-      |)                                       (.trueLabel.here(); exitBreak.here();.)
+      |)                                       (.trueLabel.here(); exitBreak.here();.)//Zaza
   .
 
   WhileStatement<StackFrame frame>           (. Label loopExit  = new Label(!known);
-                                                Label loopStart = new Label(known); Label exitBreak = new Label(!known);.)
+                                                Label loopStart = new Label(known); Label exitBreak = new Label(!known);.)//Zaza
   =  "while" "(" Condition ")"               (. CodeGen.branchFalse(loopExit); .)
-    ( Statement<frame>                        (.if(breaking){CodeGen.branch(exitBreak);}if(continuing){ continuing=false;} CodeGen.branch(loopStart);.)
+    ( Statement<frame>                        (.if(breaking){CodeGen.branch(exitBreak);}if(continuing){ continuing=false;} CodeGen.branch(loopStart);.)//Zaza
                        
     )                           
-                                                (.loopExit.here(); exitBreak.here(); breaking=false;.)
+                                                (.loopExit.here(); exitBreak.here(); breaking=false;.)//Zaza
   .
 
-   RepeatStatement<StackFrame frame>  	(. Label exitBreak = new Label(!known);.)
+   RepeatStatement<StackFrame frame>  	(. Label exitBreak = new Label(!known);.)//Zaza
     =  "repeat" {
-         Statement<frame>                 (.if(breaking){CodeGen.branch(exitBreak);}if(continuing){ continuing=false;}.)
+         Statement<frame>                 (.if(breaking){CodeGen.branch(exitBreak);}if(continuing){ continuing=false;}.)//Zaza
        }
        WEAK "until"
-       "(" Condition ")" WEAK ";"     (.exitBreak.here();.)
+       "(" Condition ")" WEAK ";"     (.exitBreak.here();.)//Zaza
        .
 
 
-  DoWhileStatement<StackFrame frame> 
+  DoWhileStatement<StackFrame frame> (. Label exitBreak = new Label(!known);.)//Zaza
   =  "do"    
-       Statement<frame>               (.if(breaking){CodeGen.branch(exitBreak);}if(continuing){continuing=false;}.)
+       Statement<frame>               (.if(breaking){CodeGen.branch(exitBreak);}if(continuing){continuing=false;}.)//Zaza
        WEAK "while"
-     "(" Condition ")" WEAK ";"       (.exitBreak.here();.)
+     "(" Condition ")" WEAK ";"       (.exitBreak.here();.)//Zaza
      .
 
-  Breakstatement
-  ="break"                            (.breaking=true;.)
+  Breakstatement	//Zaza
+  ="break"                            (.breaking=true;.)//Zaza
     WEAK ";"
     .
-  ContinueStatement
-  ="continue"                           (.continuing=true;.)
+  ContinueStatement	//Zaza
+  ="continue"                           (.continuing=true;.)//Zaza
     WEAK ";"
     .
   HaltStatement                              /* optional arguments! */
@@ -304,28 +304,28 @@ PRODUCTIONS
   .
 
 
-  ReturnStatement                             (.Label exitBreak = new Label(!known);.)
-  =  "return"                                (.if(breaking){CodeGen.branch(exitBreak);}if(continuing){CodeGen.branch(exitBreak);} CodeGen.leaveProgram(); .)
-     WEAK ";"                                 (.exitBreak.here();.)
+  ReturnStatement                             (.Label exitBreak = new Label(!known);.)//Zaza
+  =  "return"                                (.if(breaking){CodeGen.branch(exitBreak);}if(continuing){CodeGen.branch(exitBreak);} CodeGen.leaveProgram(); .)//Zaza
+     WEAK ";"                                 (.exitBreak.here();.)//Zaza
   .
 
-  ReadStatement                               (.Label exitBreak = new Label(!known);.)
-  =                                           (.if(breaking){CodeGen.branch(exitBreak);}if(continuing){CodeGen.branch(exitBreak);}.)
+  ReadStatement                               (.Label exitBreak = new Label(!known);.)//Zaza
+  =                                           (.if(breaking){CodeGen.branch(exitBreak);}if(continuing){CodeGen.branch(exitBreak);}.)//Zaza
   (  "read"     "("   ReadList    ")"       
      | "readLine" "(" [ ReadList ]  ")"      (. CodeGen.readLine(); .)
     )
-    WEAK ";"                                  (.exitBreak.here();.)
+    WEAK ";"                                  (.exitBreak.here();.)//Zaza
   .
 
-  ReadList                                    (.Label exitBreak = new Label(!known);.)
-  =                                            (.if(breaking){CodeGen.branch(exitBreak);}if(continuing){CodeGen.branch(exitBreak);}.)
-  ReadElement { WEAK "," ReadElement }         (.exitBreak.here();.)
+  ReadList                                    (.Label exitBreak = new Label(!known);.)//Zaza
+  =                                            (.if(breaking){CodeGen.branch(exitBreak);}if(continuing){CodeGen.branch(exitBreak);}.)//Zaza
+  ReadElement { WEAK "," ReadElement }         (.exitBreak.here();.)//Zaza
   .
 
-  ReadElement                                (. Label exitBreak = new Label(!known);
+  ReadElement                                (. Label exitBreak = new Label(!known);//Zaza
                                                 String str;
                                                 DesType des; .)
-  =                                           (.if(breaking){CodeGen.branch(exitBreak);}if(continuing){CodeGen.branch(exitBreak);}.)
+  =                                           (.if(breaking){CodeGen.branch(exitBreak);}if(continuing){CodeGen.branch(exitBreak);}.)//Zaza
       StringConst<out str>                   (. CodeGen.writeString(str); .)
     | Designator<out des>                    (. if (des.entry.kind != Kinds.Var)
                                                   SemError("wrong kind of identifier");
@@ -336,27 +336,27 @@ PRODUCTIONS
                                                     CodeGen.read(des.type); break;
                                                   default:
                                                     SemError("cannot read this type"); break;
-                                                } .)(.exitBreak.here();.)
+                                                } .)(.exitBreak.here();.)//Zaza
   .
 
-  WriteStatement                            (.Label exitBreak = new Label(!known);.)
-  =                                         (.if(breaking){CodeGen.branch(exitBreak);}if(continuing){CodeGen.branch(exitBreak);}.)
+  WriteStatement                            (.Label exitBreak = new Label(!known);.)//Zaza
+  =                                         (.if(breaking){CodeGen.branch(exitBreak);}if(continuing){CodeGen.branch(exitBreak);}.)//Zaza
   (   "write"     "("   WriteList   ")"
       | "writeLine" "(" [ WriteList ] ")"    (. CodeGen.writeLine(); .)
     )
-    WEAK ";"                                 (.exitBreak.here();.)
+    WEAK ";"                                 (.exitBreak.here();.)//Zaza
   
   .
 
-  WriteList                                 (.Label exitBreak = new Label(!known);.)
-  =                                         (.if(breaking){CodeGen.branch(exitBreak);}if(continuing){CodeGen.branch(exitBreak);}.)
-      WriteElement { WEAK "," WriteElement }   (.exitBreak.here();.)
+  WriteList                                 (.Label exitBreak = new Label(!known);.)//Zaza
+  =                                         (.if(breaking){CodeGen.branch(exitBreak);}if(continuing){CodeGen.branch(exitBreak);}.)//Zaza
+      WriteElement { WEAK "," WriteElement }   (.exitBreak.here();.)//Zaza
   .
 
-  WriteElement                               (. Label exitBreak = new Label(!known);
+  WriteElement                               (. Label exitBreak = new Label(!known);//Zaza
                                                 int expType;
                                                 String str; .)
-  =                                          (.if(breaking){CodeGen.branch(exitBreak);}if(continuing){CodeGen.branch(exitBreak);}.)
+  =                                          (.if(breaking){CodeGen.branch(exitBreak);}if(continuing){CodeGen.branch(exitBreak);}.)//Zaza
     StringConst<out str>                   (. CodeGen.writeString(str); .)
     | Expression<out expType>                (. if (!(isArith(expType) || expType == Types.boolType))
                                                   SemError("cannot write this type");
@@ -367,64 +367,64 @@ PRODUCTIONS
                                                     CodeGen.write(expType); break;
                                                   default:
                                                     break;
-                                                } exitBreak.here();.)
+                                                } exitBreak.here();.)//Zaza
   .
 
-  Condition                                  (. Label exitBreak = new Label(!known); 
+  Condition                                  (. Label exitBreak = new Label(!known); //Zaza
                                                 int type; .)
-  =                                           (.if(breaking){CodeGen.branch(exitBreak);}if(continuing){CodeGen.branch(exitBreak);}.)
+  =                                           (.if(breaking){CodeGen.branch(exitBreak);}if(continuing){CodeGen.branch(exitBreak);}.)//Zaza
   Expression<out type>                    (. if (!isBool(type))
-                                                  SemError("boolean expression needed");exitBreak.here(); .)
+                                                  SemError("boolean expression needed");exitBreak.here(); .)//Zaza
   .
 
-  Expression<out int type>                   (.  Label exitBreak = new Label(!known); 
+  Expression<out int type>                   (.  Label exitBreak = new Label(!known); //Zaza
                                                 int type2;
                                                 Label shortcircuit = new Label(!known); .)
-  =                                           (.if(breaking){CodeGen.branch(exitBreak);}if(continuing){CodeGen.branch(exitBreak);}.)
+  =                                           (.if(breaking){CodeGen.branch(exitBreak);}if(continuing){CodeGen.branch(exitBreak);}.)//Zaza
   AndExp<out type>
      { "||"                                  (. CodeGen.booleanOp(shortcircuit, CodeGen.or); .)
        AndExp<out type2>                     (. if (!isBool(type) || !isBool(type2))
                                                   SemError("Boolean operands needed");
                                                 type = Types.boolType; .)
-     }                                       (. shortcircuit.here();exitBreak.here(); .)
+     }                                       (. shortcircuit.here();exitBreak.here(); .)//Zaza
   .
 
-  AndExp<out int type>                       (. Label exitBreak = new Label(!known); 
+  AndExp<out int type>                       (. Label exitBreak = new Label(!known); //Zaza
                                                 int type2;
                                                 Label shortcircuit = new Label(!known); .)
-  =                                           (.if(breaking){CodeGen.branch(exitBreak);}if(continuing){CodeGen.branch(exitBreak);}.)
+  =                                           (.if(breaking){CodeGen.branch(exitBreak);}if(continuing){CodeGen.branch(exitBreak);}.)//Zaza
    EqlExp<out type>
      { "&&"                                  (. CodeGen.booleanOp(shortcircuit, CodeGen.and); .)
        EqlExp<out type2>                     (. if (!isBool(type) || !isBool(type2))
                                                   SemError("Boolean operands needed");
                                                 type = Types.boolType; .)
-     }                                       (. shortcircuit.here(); exitBreak.here(); .)
+     }                                       (. shortcircuit.here(); exitBreak.here(); .)//Zaza
   .
 
-  EqlExp<out int type>                       (.  Label exitBreak = new Label(!known);
+  EqlExp<out int type>                       (.  Label exitBreak = new Label(!known);//Zaza
                                                 int type2;
                                                 int op; .)
-  =                                           (.if(breaking){CodeGen.branch(exitBreak);}if(continuing){CodeGen.branch(exitBreak);}.)
+  =                                           (.if(breaking){CodeGen.branch(exitBreak);}if(continuing){CodeGen.branch(exitBreak);}.)//Zaza
       RelExp<out type>
      { EqualOp<out op>
        RelExp<out type2>                     (. if (!compatible(type, type2))
                                                   SemError("incomparable operand types");
                                                 CodeGen.comparison(op, type);
                                                 type = Types.boolType; .)
-     }                                        (.exitBreak.here();.)
+     }                                        (.exitBreak.here();.)//Zaza
   .
 
-  RelExp<out int type>                       (. Label exitBreak = new Label(!known);
+  RelExp<out int type>                       (. Label exitBreak = new Label(!known);//Zaza
                                                 int type2;
                                                 int op; .)
-  =                                           (.if(breaking){CodeGen.branch(exitBreak);}if(continuing){CodeGen.branch(exitBreak);}.)
+  =                                           (.if(breaking){CodeGen.branch(exitBreak);}if(continuing){CodeGen.branch(exitBreak);}.)//Zaza
   AddExp<out type>
      [ RelOp<out op>
        AddExp<out type2>                     (. if (!isArith(type) || !isArith(type2))
                                                   SemError("incomparable operand types");
                                                 CodeGen.comparison(op, type);
                                                 type = Types.boolType; .)
-     ]                                        (.exitBreak.here();.)
+     ]                                        (.exitBreak.here();.)//Zaza
   .
 
   AddExp<out int type>                       (. int type2;
