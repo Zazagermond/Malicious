@@ -232,7 +232,7 @@ PRODUCTIONS
     WEAK ";"                                  (.exitBreak.here();.)//Zaza
   .
 
-  Designator<out DesType des>                (. String name;
+  Designator<out DesType des>                (. String name;						
                                                 int indexType; .)
   =  Ident<out name>                         (. Entry entry = Table.find(name);
                                                 if (!entry.declared)
@@ -274,7 +274,7 @@ PRODUCTIONS
                                                 (.loopExit.here(); exitBreak.here(); breaking=false;.)//Zaza
   .
 
-   RepeatStatement<StackFrame frame>  	(. Label exitBreak = new Label(!known);.)//Zaza
+   RepeatStatement<StackFrame frame>  	(. Label exitBreak = new Label(!known);.)//Zaza, needs refinement
     =  "repeat" {
          Statement<frame>                 (.if(breaking){CodeGen.branch(exitBreak);}if(continuing){ continuing=false;}.)//Zaza
        }
@@ -283,7 +283,7 @@ PRODUCTIONS
        .
 
 
-  DoWhileStatement<StackFrame frame> (. Label exitBreak = new Label(!known);.)//Zaza
+  DoWhileStatement<StackFrame frame> (. Label exitBreak = new Label(!known);.)//Zaza ,needs refinement
   =  "do"    
        Statement<frame>               (.if(breaking){CodeGen.branch(exitBreak);}if(continuing){continuing=false;}.)//Zaza
        WEAK "while"
