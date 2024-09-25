@@ -1,0 +1,15 @@
+void main () { $C+
+// for1.pav
+// simple for loops
+  int i;
+  for i = 1 to 10 write(i);          // 1 2 3 4 ... 9 10
+  write("\n");
+  for i = 15 downto 1 write(i);      // 15 14 13 ... 3 2 1
+  write("\n");
+  for i = 100 downto 120 write(i);   // no output
+  write("\n");
+  for i = 1 to -10 write(i);         // no output
+  write("\n");
+  for i = 123 to 123 write(i);       // 123
+  write("\n");
+}

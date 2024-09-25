@@ -1,0 +1,24 @@
+void main () { $C+
+// for2.pav
+// simple for-loops with break and continue
+  int i;
+  for i = 1 to 10 {
+    write(i);                        // 1
+    break;
+  }
+  writeLine();
+  for i = 15 downto 1 {
+    write(i);                        // 15 14 13 12
+    if (i == 12) break;
+  }
+  writeLine();
+  for i = 1 to 10 {
+    write(i);
+    if (i == 5 || i == 7) {
+      write(" skip \n");
+      continue;
+    }
+    write(2*i); write("\n");
+  }
+  write("\n");
+}

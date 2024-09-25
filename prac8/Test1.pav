@@ -1,0 +1,23 @@
+void main() { 
+    int a=2;
+    int b=5;
+    int c=3;
+    int d=8;
+    if (a == 1) { c = d; } 
+ if (a == 1) {}
+ if (a == 1) c = d; else b = 0;
+ if (a == 1) ; else { b = 1;  } 
+
+ while (a<5){
+    break;
+    a=3;
+ }
+ write(a);
+
+ while(b<d){
+   
+   if (a<3){a=a+1;break;a=a+6;}
+   write("a");
+   b=9;
+ }write("lol");
+}
