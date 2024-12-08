@@ -5,6 +5,7 @@
 // Version for Practical 2
 
 //Changed lines 129, 344-367
+//Question 5 lines, 447-490
 
 package Assem;
 
@@ -443,14 +444,50 @@ import library.*;
           case PVM.stl_2:         // pop to local variable 2
           case PVM.stl_3:         // pop to local variable 3
           case PVM.stoc:          // character checked store
-          case PVM.inpc:          // character input
-          case PVM.prnc:          // character output
+          case PVM.inpc:          // character input 
+		adr = pop();
+		if (inBounds(adr)) {
+		 mem[adr] =(int) data.readChar();
+
+		if (data.error()) ps = badData;
+		}
+
+		break;
+   	 case PVM.prnc:          // character output
+		if (tracing) results.write(padding);
+		results.write(((char)(pop())));
+		if (tracing) results.writeLine(); 
+		 break;
+			  
+			
+			
           case PVM.cap:           // toUpperCase
           case PVM.low:           // toLowerCase
+			  //pop tos and push it back lowercase(assci +32)
+			   tos = pop();
+			  if (tos<90 && tos>64){
+				  push((tos=tos+32));
+			  }else{
+					push(tos);
+				}
+			  
+			  break;
           case PVM.islet:         // isLetter
-          case PVM.inc:           // ++
+			  //pop tos ;check ascii ;push boolean
+			  tos=pop();
+			if (Character.isLetter((char)tos)){
+				 push(1);
+			}else{
+				push(0);
+			}
+			break;
+          case PVM.inc:           // ++	
+			  push(pop()+1);
+			  break;
           case PVM.dec:           // --	
-          
+			  push(pop()+1);
+			  break;
+
 		  default:              // unrecognized opcode
             ps = badOp;
             break;

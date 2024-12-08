@@ -4,12 +4,12 @@
 5	LDA	0
 7	LDA	0
 9	LDV
-10	LOW
+10	LOW		;MAYBE HERE
 11	STO	;ch=lower(ch)
 12	LDA	0
 14	LDV
-15	ISLET
-16	BZE	53	;	if (isLetter(ch))
+15	ISLET	;MAYBE HERE
+16	BZE	54	;	if (isLetter(ch)) 
 18	LDA	0
 20	LDA	0
 22	LDV
@@ -30,15 +30,16 @@
 44	STO
 45	LDA	0
 47	LDA	0
-49	LDC	97
-51	ADD
-52	STO	; ('a' + (ch - 'a' + 13) % 26);
-53	LDC	0
-55	LDV
-56	PRNC	;Write(ch)
-57	LDA	0
-59	LDV
-60	LDC	46
-62	CEQ
-63	BZE	2
-65	HALT
+49	LDV			
+50	LDC	97
+52	ADD
+53	STO	; ('a' + (ch - 'a' + 13) % 26);
+54	LDA	0 
+56	LDV
+57	PRNC	;Write(ch)
+58	LDA	0
+60	LDV
+61	LDC	46
+63	CEQ
+64	BZE	2	;until (ch == '.'); loop
+66	HALT
